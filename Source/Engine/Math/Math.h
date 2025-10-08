@@ -63,6 +63,25 @@ namespace neu::math {
 		return (v < 0) ? (T)-1 : (v > 0) ? (T)1 : (T)0;
 	}
 
+	/// <summary>
+	/// Performs a linear interpolation between two floating-point values.
+	/// </summary>
+	/// <typeparam name="T">A floating-point type (satisfies std::floating_point) used for the interpolation.</typeparam>
+	/// <param name="min">The start value (corresponding to t = 0).</param>
+	/// <param name="max">The end value (corresponding to t = 1).</param>
+	/// <param name="t">Interpolation factor; typically 0 returns min, 1 returns max, values outside [0,1] extrapolate.</param>
+	/// <returns>The interpolated value computed as min + (max - min) * t.</returns>
+	template<std::floating_point T>
+	inline T Lerp(T min, T max, T t) {
+		return min + (max - min) * t;
+	}
+
+	template<std::floating_point T>
+	inline T Remap(T min1, T max1, T min2, T max2, T v) {
+		T t = (v - min1) / (max1 - min1);
+		return Lerp(min2, max2, t);
+	}
+
 	using std::min;
 	using std::max;
 	using std::clamp;

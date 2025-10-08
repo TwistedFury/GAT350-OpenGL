@@ -8,7 +8,97 @@ int main(int argc, char* argv[]) {
     neu::GetEngine().Initialize();
 
     // initialize scene
+    float z = 0; // Use for screen
+    // Vector things for OpenGL
+    std::vector<neu::vec3> triangle_points{
+        { -0.5f, -0.5f, z },
+        {  0.0f,  1.0f, z },
+        {  0.5f,  0.5f, z }
+    };
+    std::vector<neu::vec3> triangle_colors{
+        { 1, 0, 0 },
+        { 0, 1, 0 },
+        { 0, 0, 1 }
+    };
 
+    std::vector<neu::vec3> strip_points{
+        { -0.6f,  -0.6f,  z },
+        { -0.7f,  -0.3f,  z },
+        { -0.45f, -0.45f, z },
+        { -0.5f,   0.0f,  z },
+        { -0.1f,  -0.1f,  z },
+        { -0.2f,   0.1f,  z }
+    };
+    std::vector<neu::vec3> strip_colors{
+        { 1, 0, 0 },
+        { 0, 1, 0 },
+        { 0, 0, 1 },
+        { 1, 1, 1 },
+        { 0, 0, 1 },
+        { 0, 1, 0 }
+    };
+
+    std::vector<neu::vec3> quad_points{
+        { -0.75f, -0.75f, z },
+        { -0.75f,  0.75f, z },
+        {  0.75f,  0.75f, z },
+        {  0.75f, -0.75f, z }
+    };
+    std::vector<neu::vec3> quad_colors{
+        { 1, 0, 0 },
+        { 0, 1, 0 },
+        { 0, 0, 1 },
+        { 1, 1, 1 }
+    };
+
+    // BUFFING TIME
+    // Vertex
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_points.size(), triangle_points.data(), GL_STATIC_DRAW);
+    
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    // SHADE ME
+    std::string vs_source;
+    neu::file::ReadTextFile("Shaders/basic.vert", vs_source);
+    const char* vs_cstr = vs_source.c_str();
+
+    GLuint vs;
+    vs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vs, 1, &vs_cstr, NULL);
+    glCompileShader(vs);
+
+    // Fragment
+    GLuint fbo;
+    glGenBuffers(1, &fbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, fbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_points.size(), triangle_points.data(), GL_STATIC_DRAW);
+
+    GLuint fao;
+    glGenVertexArrays(1, &fao);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, fbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    // SHADE ME
+    std::string fs_source;
+    neu::file::ReadTextFile("Shaders/basic.frag", fs_source);
+    const char* fs_cstr = fs_source.c_str();
+
+    GLuint fs;
+    fs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(fs, 1, &fs_cstr, NULL);
+    glCompileShader(fs);
 
     SDL_Event e;
     bool quit = false;
@@ -24,60 +114,63 @@ int main(int argc, char* argv[]) {
         // update
         neu::GetEngine().Update();
 
+        // Take User Input
         if (neu::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
+
+        // ORDER:: SCALE -> ROTATE -> TRANSLATE
+        /*
+        // Define angle and scale
+        float angle = neu::GetEngine().GetTime().GetTime() * 90.0f;
+        float scale = neu::math::Remap(-1.0f, 1.0f, 0.3f, 1.2f, neu::math::sin(neu::GetEngine().GetTime().GetTime()));
+
+        // We move with WASD (movement of each key is set to traditional movement)
+        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_D)) glTranslatef(0.001f, 0, 0);
+        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_A)) glTranslatef(-0.001f, 0, 0);
+        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_W)) glTranslatef(0, 0.001f, 0);
+        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_S)) glTranslatef(0, -0.001f, 0);
+        */
 
         // draw
         neu::vec3 color{ 0, 0, 0 };
         neu::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
         neu::GetEngine().GetRenderer().Clear();
 
-        float z = 0; // Use for screen
-
+        /*
         // TRIANGLE_STRIP
         glBegin(GL_TRIANGLE_STRIP);
-
-        glColor3f(1, 0, 0);
-        glVertex3f(-0.6f, -0.6f, z);
-        glColor3f(0, 1, 0);
-        glVertex3f(-0.7f, -0.3f, z);
-        glColor3f(0, 0, 1);
-        glVertex3f(-0.45f, -0.45f, z);
-        glColor3f(1, 1, 1);
-        glVertex3f(-0.5f, 0, z);
-        glColor3f(0, 0, 1);
-        glVertex3f(-0.1f, -0.1f, z);
-        glColor3f(1, 1, 1);
-        glVertex3f(-0.2f, 0.1f, z);
-
+        for (int i = 0; i < strip_points.size() && i < strip_colors.size(); i++)
+        {
+            glVertex3f(strip_points[i].x, strip_points[i].y, strip_points[i].z);
+            glColor3f(strip_colors[i].r, strip_colors[i].g, strip_colors[i].b);
+        }
         glEnd();
+
+        glLoadIdentity();
+        glPushMatrix();
+
+        // TRANSFORM
+        //
 
         // TRIANGLE
         glBegin(GL_TRIANGLES);
-
-        glColor3f(1, 0, 0);
-        glVertex3f(-0.5f, -0.5f, z);
-        glColor3f(0, 1, 0);
-        glVertex3f(0, 1, z);
-        glColor3f(0, 0, 1);
-        glVertex3f(0.5, 0.5, z);
+        for (int i = 0; i < triangle_points.size() && i < triangle_colors.size(); i++)
+        {
+            glVertex3f(triangle_points[i].x, triangle_points[i].y, triangle_points[i].z);
+            glColor3f(triangle_colors[i].r, triangle_colors[i].g, triangle_colors[i].b);
+        }
+        glPopMatrix();
 
         glEnd();
-
 
         // QUAD
         glBegin(GL_QUADS);
-
-        glColor3f(1, 0, 0);
-        glVertex3f(-0.75f, -0.75f, z);
-        glColor3f(0, 1, 0);
-        glVertex3f(-0.75f, 0.75f, z);
-        glColor3f(0, 0, 1);
-        glVertex3f(0.75f, 0.75f, z);
-        glColor3f(1, 1, 1);
-        glVertex3f(0.75f, -0.75f, z);
-
+        for (int i = 0; i < quad_points.size() && i < quad_colors.size(); i++)
+        {
+            glVertex3f(quad_points[i].x, quad_points[i].y, quad_points[i].z);
+            glColor3f(quad_points[i].r, quad_points[i].g, quad_points[i].b);
+        }
         glEnd();
-
+        */
 
         neu::GetEngine().GetRenderer().Present();
     }
