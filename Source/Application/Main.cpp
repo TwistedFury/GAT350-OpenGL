@@ -11,9 +11,9 @@ int main(int argc, char* argv[]) {
     float z = 0; // Use for screen
     // Vector things for OpenGL
     std::vector<neu::vec3> triangle_points{
-        { -0.5f, -0.5f, z },
-        {  0.0f,  1.0f, z },
-        {  0.5f,  0.5f, z }
+        {  -2.0f/3, 0.0f, z },
+        {     0.0f, 1.0f, z },
+        { (2/3.0f), 0.0f, z }
     };
     std::vector<neu::vec3> triangle_colors{
         { 1, 0, 0 },
@@ -53,18 +53,30 @@ int main(int argc, char* argv[]) {
 
     // BUFFING TIME
     // Vertex
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
+    GLuint vbo[2];
+    glGenBuffers(2, vbo);
     
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // Points
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_points.size(), triangle_points.data(), GL_STATIC_DRAW);
     
+    // Color
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_colors.size(), triangle_colors.data(), GL_STATIC_DRAW);
+
     GLuint vao;
     glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
+    // Position
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    // Colors
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // SHADE ME
     std::string vs_source;
@@ -76,29 +88,50 @@ int main(int argc, char* argv[]) {
     glShaderSource(vs, 1, &vs_cstr, NULL);
     glCompileShader(vs);
 
+    int success;
+    glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        std::string infoLog(512, '\0');  // pre-allocate space
+        GLsizei length;
+        glGetShaderInfoLog(vs, (GLsizei)infoLog.size(), &length, &infoLog[0]);
+        infoLog.resize(length);
+
+        LOG_WARNING("Shader compilation failed: {}", infoLog);
+    }
+
     // Fragment
-    GLuint fbo;
-    glGenBuffers(1, &fbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, fbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_points.size(), triangle_points.data(), GL_STATIC_DRAW);
-
-    GLuint fao;
-    glGenVertexArrays(1, &fao);
-
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, fbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
     // SHADE ME
     std::string fs_source;
     neu::file::ReadTextFile("Shaders/basic.frag", fs_source);
     const char* fs_cstr = fs_source.c_str();
 
     GLuint fs;
-    fs = glCreateShader(GL_VERTEX_SHADER);
+    fs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fs, 1, &fs_cstr, NULL);
     glCompileShader(fs);
+
+    glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        std::string infoLog(512, '\0');  // pre-allocate space
+        GLsizei length;
+        glGetShaderInfoLog(fs, (GLsizei)infoLog.size(), &length, &infoLog[0]);
+        infoLog.resize(length);
+
+        LOG_WARNING("Shader compilation failed: {}", infoLog);
+    }
+
+    // LINK ME
+    GLuint program = glCreateProgram();
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    glUseProgram(program);
+
+    // UNIFORM (TIME)
+    GLint uniform = glGetUniformLocation(program, "u_time");
+    ASSERT(uniform != -1);
 
     SDL_Event e;
     bool quit = false;
@@ -117,6 +150,8 @@ int main(int argc, char* argv[]) {
         // Take User Input
         if (neu::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
 
+        glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
+
         // ORDER:: SCALE -> ROTATE -> TRANSLATE
         /*
         // Define angle and scale
@@ -134,6 +169,9 @@ int main(int argc, char* argv[]) {
         neu::vec3 color{ 0, 0, 0 };
         neu::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
         neu::GetEngine().GetRenderer().Clear();
+
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, (GLsizei)triangle_points.size());
 
         /*
         // TRIANGLE_STRIP

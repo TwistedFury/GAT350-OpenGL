@@ -210,8 +210,8 @@ namespace neu {
     /// Clears the rendering buffers and sets the background color.
     /// </summary>
     void Renderer::Clear() {
-        // Note: currently set to purple
-        glClearColor(83.0f / 255, 21.0f / 255, 138.0f / 255, 1);
+        // Note: currently set to black
+        glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
