@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
         { 0, 0, 1 },
         { 1, 1, 1 }
     };
-
+    /*
     // BUFFING TIME
     // Vertex
     GLuint vbo[2];
@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
     // UNIFORM (TIME)
     GLint uniform = glGetUniformLocation(program, "u_time");
     ASSERT(uniform != -1);
-
+    */
     SDL_Event e;
     bool quit = false;
 
@@ -150,31 +150,31 @@ int main(int argc, char* argv[]) {
         // Take User Input
         if (neu::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
 
-        glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
+        //glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
 
         // ORDER:: SCALE -> ROTATE -> TRANSLATE
-        /*
+        
         // Define angle and scale
         float angle = neu::GetEngine().GetTime().GetTime() * 90.0f;
         float scale = neu::math::Remap(-1.0f, 1.0f, 0.3f, 1.2f, neu::math::sin(neu::GetEngine().GetTime().GetTime()));
-
-        // We move with WASD (movement of each key is set to traditional movement)
-        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_D)) glTranslatef(0.001f, 0, 0);
-        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_A)) glTranslatef(-0.001f, 0, 0);
-        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_W)) glTranslatef(0, 0.001f, 0);
-        if (neu::GetEngine().GetInput().GetKeyDown(SDL_SCANCODE_S)) glTranslatef(0, -0.001f, 0);
-        */
 
         // draw
         neu::vec3 color{ 0, 0, 0 };
         neu::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
         neu::GetEngine().GetRenderer().Clear();
 
-        glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, (GLsizei)triangle_points.size());
+        //glBindVertexArray(vao);
+        //glDrawArrays(GL_TRIANGLES, 0, (GLsizei)triangle_points.size());
 
-        /*
-        // TRIANGLE_STRIP
+        
+        // TRIANGLE_STRIP !!!!!!! THIS IS THE GOODBYE WORLD ASSIGNMENT
+        glLoadIdentity();
+        glPushMatrix();
+        // Do things
+        glScalef(scale, scale, scale);
+        glRotatef(angle / 10, 0, 0, 1);
+        glTranslatef(sin(neu::GetEngine().GetTime().GetTime()), cos(neu::GetEngine().GetTime().GetTime()), 0);
+
         glBegin(GL_TRIANGLE_STRIP);
         for (int i = 0; i < strip_points.size() && i < strip_colors.size(); i++)
         {
@@ -183,12 +183,16 @@ int main(int argc, char* argv[]) {
         }
         glEnd();
 
+        // Remove layer with transformations (prepare for next shape)
+        glPopMatrix();
+
+        // Ensure that matrix is good, then push a layer out (copy) and prepare for transformations
         glLoadIdentity();
         glPushMatrix();
-
+        // ...
         // TRANSFORM
         //
-
+        /*
         // TRIANGLE
         glBegin(GL_TRIANGLES);
         for (int i = 0; i < triangle_points.size() && i < triangle_colors.size(); i++)
