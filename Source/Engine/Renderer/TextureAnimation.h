@@ -22,7 +22,7 @@ namespace neu {
 		/// <param name="filename">Path to the animation JSON file (e.g., "assets/animations/player_walk.json")</param>
 		/// <param name="renderer">Reference to the Renderer used to load the texture</param>
 		/// <returns>True if the animation was successfully loaded; otherwise, false</returns>
-		bool Load(const std::string& filename, class Renderer& renderer);
+		bool Load(const std::string& filename);
 
 		/// <summary>
 		/// Gets the size of a single animation frame in pixels.

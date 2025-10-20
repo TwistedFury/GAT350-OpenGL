@@ -21,40 +21,13 @@ int main(int argc, char* argv[]) {
         { 0, 0, 1 }
     };
 
-    std::vector<neu::vec3> strip_points{
-        { -0.6f,  -0.6f,  z },
-        { -0.7f,  -0.3f,  z },
-        { -0.45f, -0.45f, z },
-        { -0.5f,   0.0f,  z },
-        { -0.1f,  -0.1f,  z },
-        { -0.2f,   0.1f,  z }
-    };
-    std::vector<neu::vec3> strip_colors{
-        { 1, 0, 0 },
-        { 0, 1, 0 },
-        { 0, 0, 1 },
-        { 1, 1, 1 },
-        { 0, 0, 1 },
-        { 0, 1, 0 }
-    };
-
-    std::vector<neu::vec3> quad_points{
-        { -0.75f, -0.75f, z },
-        { -0.75f,  0.75f, z },
-        {  0.75f,  0.75f, z },
-        {  0.75f, -0.75f, z }
-    };
-    std::vector<neu::vec3> quad_colors{
-        { 1, 0, 0 },
-        { 0, 1, 0 },
-        { 0, 0, 1 },
-        { 1, 1, 1 }
-    };
+    // Interweaved Vertex
+    std::vector<neu::vec2> texcoord{ { 0, 0 }, { 0.5f, 1 }, { 1, 1 } };
     
     // BUFFING TIME
     // Vertex
-    GLuint vbo[2];
-    glGenBuffers(2, vbo);
+    GLuint vbo[3];
+    glGenBuffers(3, vbo);
     
     // Points
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -64,6 +37,11 @@ int main(int argc, char* argv[]) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_colors.size(), triangle_colors.data(), GL_STATIC_DRAW);
 
+    // TexCoord
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * texcoord.size(), texcoord.data(), GL_STATIC_DRAW);
+    
+    // Vertex Array
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -78,60 +56,29 @@ int main(int argc, char* argv[]) {
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-    // SHADE ME
-    std::string vs_source;
-    neu::file::ReadTextFile("Shaders/basic.vert", vs_source);
-    const char* vs_cstr = vs_source.c_str();
+    // TexCoord
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
-    GLuint vs;
-    vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vs_cstr, NULL);
-    glCompileShader(vs);
-
-    int success;
-    glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        std::string infoLog(512, '\0');  // pre-allocate space
-        GLsizei length;
-        glGetShaderInfoLog(vs, (GLsizei)infoLog.size(), &length, &infoLog[0]);
-        infoLog.resize(length);
-
-        LOG_WARNING("Shader compilation failed: {}", infoLog);
-    }
-
-    // Fragment
-    // SHADE ME
-    std::string fs_source;
-    neu::file::ReadTextFile("Shaders/basic.frag", fs_source);
-    const char* fs_cstr = fs_source.c_str();
-
-    GLuint fs;
-    fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fs_cstr, NULL);
-    glCompileShader(fs);
-
-    glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        std::string infoLog(512, '\0');  // pre-allocate space
-        GLsizei length;
-        glGetShaderInfoLog(fs, (GLsizei)infoLog.size(), &length, &infoLog[0]);
-        infoLog.resize(length);
-
-        LOG_WARNING("Shader compilation failed: {}", infoLog);
-    }
+    auto vs = neu::Resources().Get<neu::Shader>("shaders/basic.vert", GL_VERTEX_SHADER);
+    auto fs = neu::Resources().Get<neu::Shader>("shaders/basic.frag", GL_FRAGMENT_SHADER);
 
     // LINK ME
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glUseProgram(program);
+    auto program = std::make_shared<neu::Program>();
+    program->AttachShader(vs);
+    program->AttachShader(fs);
+    program->Link();
+    program->Use();
 
-    // UNIFORM (TIME)
-    GLint uniform = glGetUniformLocation(program, "u_time");
-    ASSERT(uniform != -1);
+    // Texture
+    // UNIFORM (TEXCOORD)
+    neu::res_t<neu::Texture> texture = neu::Resources().Get<neu::Texture>("textures/beast.png");
+    program->SetUniform("u_texture", 0);
+
+    //// UNIFORM (TIME)
+    //program->SetUniform("u_time", 0);
+
     
     SDL_Event e;
     bool quit = false;
@@ -150,11 +97,9 @@ int main(int argc, char* argv[]) {
         // Take User Input
         if (neu::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
 
-        glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
+        //glUniform1f(uniform, neu::GetEngine().GetTime().GetTime());
 
         // draw
-        neu::vec3 color{ 0, 0, 0 };
-        neu::GetEngine().GetRenderer().SetColor(color.r, color.g, color.b);
         neu::GetEngine().GetRenderer().Clear();
 
         glBindVertexArray(vao);

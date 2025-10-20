@@ -18,7 +18,7 @@ namespace neu {
 	/// <param name="filename">Path to the JSON animation configuration file</param>
 	/// <param name="renderer">Reference to the Renderer for loading the texture</param>
 	/// <returns>True if the animation and texture were successfully loaded; otherwise, false</returns>
-	bool TextureAnimation::Load(const std::string& filename, class Renderer& renderer) {
+	bool TextureAnimation::Load(const std::string& filename) {
 		// Load the JSON document
 		neu::serial::document_t document;
 		if (!neu::serial::Load(filename, document)) {
@@ -31,7 +31,7 @@ namespace neu {
 		SERIAL_READ(document, texture_name);
 
 		// Load the sprite sheet texture using the resource manager
-		m_texture = Resources().Get<Texture>(texture_name, renderer);
+		m_texture = Resources().Get<Texture>(texture_name);
 		if (!m_texture) {
 			LOG_ERROR("Could not load texture in Texture Animation {}", texture_name);
 		}
