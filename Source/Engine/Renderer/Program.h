@@ -1,7 +1,7 @@
 #pragma once
 #include "Resources/Resource.h"
 #include <glad/glad.h>
-//#include <glm/glm.hpp>
+#include <glm/glm.hpp>
 
 namespace neu
 {
@@ -26,10 +26,8 @@ namespace neu
 		void SetUniform(const std::string& name, const vec2& value);
 		void SetUniform(const std::string& name, const vec3& value);
 
-		/*
 		void SetUniform(const std::string& name, const glm::mat3& value);
 		void SetUniform(const std::string& name, const glm::mat4& value);
-		*/
 
 	public:
 		GLuint m_program = 0;

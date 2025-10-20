@@ -15,5 +15,5 @@ void main()
 	float x_offset = cos(u_time + gl_FragCoord.x);
 	f_color = vec4(v_color % (y_offset * x_offset), 1);
 
-	f_color = texture(u_texture, v_texcoord);// * vec4(v_color, 1);
+	f_color = texture(u_texture, v_texcoord) * vec4(v_color, 1);
 }

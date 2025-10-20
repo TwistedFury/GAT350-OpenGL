@@ -10,19 +10,21 @@ int main(int argc, char* argv[]) {
     // initialize scene
     float z = 0; // Use for screen
     // Vector things for OpenGL
-    std::vector<neu::vec3> triangle_points{
-        {  -2.0f/3, 0.0f, z },
-        {     0.0f, 1.0f, z },
-        { (2/3.0f), 0.0f, z }
+    std::vector<neu::vec3> points{
+        { -1, -1, z },
+        { 1, -1, z },
+        { 1, 1, z },
+        { -1, 1, z }
     };
-    std::vector<neu::vec3> triangle_colors{
+    std::vector<neu::vec3> colors{
         { 1, 0, 0 },
         { 0, 1, 0 },
-        { 0, 0, 1 }
+        { 0, 0, 1 },
+        { 1, 1, 0 }
     };
 
-    // Interweaved Vertex
-    std::vector<neu::vec2> texcoord{ { 0, 0 }, { 0.5f, 1 }, { 1, 1 } };
+    // Texture Coords
+    std::vector<neu::vec2> texcoord{ { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } };
     
     // BUFFING TIME
     // Vertex
@@ -31,11 +33,10 @@ int main(int argc, char* argv[]) {
     
     // Points
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_points.size(), triangle_points.data(), GL_STATIC_DRAW);
-    
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * points.size(), points.data(), GL_STATIC_DRAW);
     // Color
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * triangle_colors.size(), triangle_colors.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * colors.size(), colors.data(), GL_STATIC_DRAW);
 
     // TexCoord
     glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
@@ -78,7 +79,14 @@ int main(int argc, char* argv[]) {
 
     //// UNIFORM (TIME)
     //program->SetUniform("u_time", 0);
+    
+    // GLM THINGS
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 
+    program->SetUniform("u_model", model);
     
     SDL_Event e;
     bool quit = false;
@@ -103,7 +111,7 @@ int main(int argc, char* argv[]) {
         neu::GetEngine().GetRenderer().Clear();
 
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, (GLsizei)triangle_points.size());
+        glDrawArrays(GL_QUADS, 0, (GLsizei)points.size());
 
         neu::GetEngine().GetRenderer().Present();
     }

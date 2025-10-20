@@ -28,7 +28,7 @@ namespace neu {
             LOG_ERROR("Could not load image: {}", filename);
             return false;
         }
-
+        
         const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(surface->format);
 
         int channels = details->bytes_per_pixel;
