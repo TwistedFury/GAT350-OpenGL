@@ -7,61 +7,53 @@ int main(int argc, char* argv[]) {
     LOG_INFO("initialize engine...");
     neu::GetEngine().Initialize();
 
+    struct Vertex
+    {
+        glm::vec3 position;
+        glm::vec3 color;
+        glm::vec2 texcoord;
+    };
+
     // initialize scene
-    float z = 0; // Use for screen
+    // Use for screen
     // Vector things for OpenGL
-    std::vector<neu::vec3> points{
-        { -1, -1, z },
-        { 1, -1, z },
-        { 1, 1, z },
-        { -1, 1, z }
+    //std::vector<neu::vec3> points{
+    //    { -1, -1, z },
+    //    { 1, -1, z },
+    //    { 1, 1, z },
+    //    { -1, 1, z }
+    //};
+    //std::vector<neu::vec3> colors{
+    //    { 1, 0, 0 },
+    //    { 0, 1, 0 },
+    //    { 0, 0, 1 },
+    //    { 1, 1, 0 }
+    //};
+    //// Texture Coords
+    //std::vector<neu::vec2> texcoord{ { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
+
+    // Vertices
+    std::vector<Vertex> vertices
+    {
+        { { -0.5f, -0.5f, 0 }, { 0, 0, 1 }, { 0, 0 } },
+        { { 0.5f, -0.5f, 0}, { 0, 0, 1 }, { 0, 1 } },
+        { { 0.5f, 0.5f, 0}, { 0, 0, 1 }, { 1, 1 } },
+        { { -0.5f, 0.5f, 0}, { 0, 0, 1 }, { 1, 0 } }
     };
-    std::vector<neu::vec3> colors{
-        { 1, 0, 0 },
-        { 0, 1, 0 },
-        { 0, 0, 1 },
-        { 1, 1, 0 }
-    };
 
-    // Texture Coords
-    std::vector<neu::vec2> texcoord{ { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 } };
-    
-    // BUFFING TIME
-    // Vertex
-    GLuint vbo[3];
-    glGenBuffers(3, vbo);
-    
-    // Points
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * points.size(), points.data(), GL_STATIC_DRAW);
-    // Color
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * colors.size(), colors.data(), GL_STATIC_DRAW);
+    // Indices -> switch to GLushort
+    std::vector<GLushort> indices{ 0, 1, 2, 2, 3, 0 };
 
-    // TexCoord
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(neu::vec3) * texcoord.size(), texcoord.data(), GL_STATIC_DRAW);
-    
-    // Vertex Array
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    // Vertex Buffer
+    neu::res_t<neu::VertexBuffer> vb = std::make_shared<neu::VertexBuffer>();
+    // Casting "bullshittery"
+    vb->CreateVertexBuffer((GLsizei)(sizeof(Vertex) * vertices.size()), (GLsizei)vertices.size(), vertices.data());
+    vb->CreateIndexBuffer(GL_UNSIGNED_SHORT, (GLsizei)indices.size(), indices.data());
+    vb->SetAttribute(0, 3, sizeof(Vertex), offsetof(Vertex, position));
+    vb->SetAttribute(1, 3, sizeof(Vertex), offsetof(Vertex, color));
+    vb->SetAttribute(2, 2, sizeof(Vertex), offsetof(Vertex, texcoord));
 
-    // Position
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-    // Colors
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-    // TexCoord
-    glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-
+    // Shaders
     auto vs = neu::Resources().Get<neu::Shader>("shaders/basic.vert", GL_VERTEX_SHADER);
     auto fs = neu::Resources().Get<neu::Shader>("shaders/basic.frag", GL_FRAGMENT_SHADER);
 
@@ -91,6 +83,10 @@ int main(int argc, char* argv[]) {
     SDL_Event e;
     bool quit = false;
 
+    // Model Class Test
+    auto model3d = std::make_shared<neu::Model>();
+    model3d->Load("models/sphere.obj");
+
     // MAIN LOOP
     while (!quit) {
         while (SDL_PollEvent(&e)) {
@@ -110,8 +106,8 @@ int main(int argc, char* argv[]) {
         // draw
         neu::GetEngine().GetRenderer().Clear();
 
-        glBindVertexArray(vao);
-        glDrawArrays(GL_QUADS, 0, (GLsizei)points.size());
+        //vb->Draw(GL_TRIANGLES);
+        model3d->Draw(GL_TRIANGLES);
 
         neu::GetEngine().GetRenderer().Present();
     }

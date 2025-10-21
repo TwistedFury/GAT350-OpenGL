@@ -41,11 +41,13 @@
 #include "Audio/AudioSystem.h"
 
 // renderer
+#include "Renderer/Model.h"
 #include "Renderer/Program.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
 #include "Renderer/TextureAnimation.h"
+#include "Renderer/VertexBuffer.h"
 
 // physics
 #include "Physics/Collidable.h"
