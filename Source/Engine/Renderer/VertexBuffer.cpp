@@ -18,7 +18,8 @@ namespace neu
 
 	void VertexBuffer::Draw(GLenum primitiveType)
 	{
-		glBindVertexArray(m_vao);
+		if (m_vao) glBindVertexArray(m_vao);
+		else Logger::Error("VertexBuffer.cpp", 21, "m_vao doesn't exist during draw");
 		if (m_ibo) glDrawElements(primitiveType, m_indexCount, m_indexType, 0);
 		else if (m_vbo) glDrawArrays(primitiveType, 0, m_vertexCount);
 	}

@@ -13,18 +13,19 @@ namespace neu
 		Program();
 		~Program();
 
+		bool Load(const std::string& filename);
 		void AttachShader(std::shared_ptr<Shader> shader);
-		void Link();
+		bool Link();
 		void Use();
 
 		// UNIFORM TIME
 		void SetUniform(const std::string& name, float value);
 		void SetUniform(const std::string& name, int value);
-		void SetUniform(const std::string& name, uint16_t value);
+		void SetUniform(const std::string& name, uint32_t value);
 		void SetUniform(const std::string& name, bool value);
 
-		void SetUniform(const std::string& name, const vec2& value);
-		void SetUniform(const std::string& name, const vec3& value);
+		void SetUniform(const std::string& name, const glm::vec2& value);
+		void SetUniform(const std::string& name, const glm::vec3& value);
 
 		void SetUniform(const std::string& name, const glm::mat3& value);
 		void SetUniform(const std::string& name, const glm::mat4& value);

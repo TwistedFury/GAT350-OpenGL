@@ -210,9 +210,13 @@
   <ItemGroup>
     <None Include="..\..\Build\Assets\Shaders\basic.frag" />
     <None Include="..\..\Build\Assets\Shaders\basic.vert" />
+    <None Include="..\..\Build\Assets\Shaders\basic_lit.frag" />
+    <None Include="..\..\Build\Assets\Shaders\basic_lit.prog" />
+    <None Include="..\..\Build\Assets\Shaders\basic_lit.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Build\Assets\Textures\beast.png" />
+    <Image Include="..\..\Build\Assets\Textures\spot_diffuse.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
