@@ -11,3 +11,4 @@ void main()
 {
 	f_color = texture(u_texture, v_texcoord) * vec4(v_color, 1);
 }
+

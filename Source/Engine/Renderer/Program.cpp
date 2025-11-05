@@ -93,7 +93,7 @@ namespace neu
 		if (location != -1) glUniform1i(location, value);
 	}
 
-	void Program::SetUniform(const std::string& name, uint32_t value)
+	void Program::SetUniform(const std::string& name, unsigned int value)
 	{
 		GLint location = GetUniformLocation(name);
 		if (location != -1) glUniform1ui(location, value);

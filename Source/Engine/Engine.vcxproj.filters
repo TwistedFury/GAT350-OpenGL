@@ -39,6 +39,9 @@
     <Filter Include="Source\Physics">
       <UniqueIdentifier>{9ba8352a-461e-4a3f-a351-7ae28744a574}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GUI">
+      <UniqueIdentifier>{6e0809d3-88e3-41c4-9f0c-02e158c3f470}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -92,9 +95,6 @@
     <ClCompile Include="Renderer\TextureAnimation.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Audio\AudioChannel.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\ThirdParty\glad\src\glad.c">
       <Filter>Source</Filter>
     </ClCompile>
@@ -112,6 +112,42 @@
     </ClCompile>
     <ClCompile Include="Renderer\Material.cpp">
       <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\ModelRenderer.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui\imgui.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui\imgui_draw.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui\imgui_tables.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui\imgui_widgets.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui\backends\imgui_impl_sdl3.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LightComponent.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\CameraComponent.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\FirstPersonController.cpp">
+      <Filter>Source\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioChannel.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Editor.cpp">
+      <Filter>Source\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,9 +256,6 @@
     <ClInclude Include="Math\Rect.h">
       <Filter>Source\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\AudioChannel.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\Shader.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
@@ -237,6 +270,27 @@
     </ClInclude>
     <ClInclude Include="Renderer\Material.h">
       <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ModelRenderer.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CameraComponent.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LightComponent.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioChannel.h">
+      <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\FirstPersonController.h">
+      <Filter>Source\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUI.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Editor.h">
+      <Filter>Source\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

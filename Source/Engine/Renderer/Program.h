@@ -2,6 +2,7 @@
 #include "Resources/Resource.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <map>
 
 namespace neu
 {
@@ -21,7 +22,7 @@ namespace neu
 		// UNIFORM TIME
 		void SetUniform(const std::string& name, float value);
 		void SetUniform(const std::string& name, int value);
-		void SetUniform(const std::string& name, uint32_t value);
+		void SetUniform(const std::string& name, unsigned int value);
 		void SetUniform(const std::string& name, bool value);
 
 		void SetUniform(const std::string& name, const glm::vec2& value);

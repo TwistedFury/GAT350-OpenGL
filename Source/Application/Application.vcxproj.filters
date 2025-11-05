@@ -14,6 +14,12 @@
     <Filter Include="Assets\Textures">
       <UniqueIdentifier>{8851f171-3fd5-4964-82f0-a0527d6b9924}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Scenes">
+      <UniqueIdentifier>{47755e8a-1dcf-441b-9ec2-6cfbc0606b76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Materials">
+      <UniqueIdentifier>{43d94324-394c-461c-8b1d-8e5261824151}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -44,12 +50,39 @@
     <None Include="..\..\Build\Assets\Shaders\basic_lit.prog">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="..\..\Build\Assets\Shaders\basic.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Scenes\scene01.json">
+      <Filter>Assets\Scenes</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_phong.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_phong.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\basic_phong.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\spot.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Build\Assets\Textures\beast.png">
       <Filter>Assets\Textures</Filter>
     </Image>
     <Image Include="..\..\Build\Assets\Textures\spot_diffuse.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="..\..\Build\Assets\Textures\sphere.png">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="..\..\Build\Assets\Textures\2k_earth_nightmap.jpg">
+      <Filter>Assets\Textures</Filter>
+    </Image>
+    <Image Include="..\..\Build\Assets\Textures\2k_moon.jpg">
       <Filter>Assets\Textures</Filter>
     </Image>
   </ItemGroup>

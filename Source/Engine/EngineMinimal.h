@@ -1,5 +1,11 @@
 #pragma once
 
+// components
+#include "Components/CameraComponent.h"
+#include "Components/FirstPersonController.h"
+#include "Components/LightComponent.h"
+#include "Components/ModelRenderer.h"
+
 // core
 #include "Core/Assert.h"
 #include "Core/Factory.h"
@@ -12,8 +18,9 @@
 #include "Core/Time.h"
 
 // framework
-#include "Framework/Object.h"
 #include "Framework/Actor.h"
+#include "Framework/Component.h"
+#include "Framework/Object.h"
 #include "Framework/Scene.h"
 
 // math
@@ -22,6 +29,10 @@
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Rect.h"
+
+// gui
+#include "GUI/Editor.h"
+#include "GUI/GUI.h"
 
 // resources
 #include "Resources/Resource.h"
@@ -41,6 +52,7 @@
 #include "Audio/AudioSystem.h"
 
 // renderer
+#include "Renderer/Material.h"
 #include "Renderer/Model.h"
 #include "Renderer/Program.h"
 #include "Renderer/Renderer.h"
@@ -64,6 +76,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <imgui.h>
+
 // standard library
 #include <string>
 #include <iostream>
@@ -72,6 +86,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <set>
 #include <cstdlib>
 #include <random>
 #include <algorithm>

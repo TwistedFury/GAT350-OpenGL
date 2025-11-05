@@ -48,6 +48,7 @@ namespace neu {
         glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
         glActiveTexture(GL_TEXTURE0);
+        glBindTexture(m_target, m_texture); // Re-bind (Sanity Check)
 
         SDL_DestroySurface(surface);
 

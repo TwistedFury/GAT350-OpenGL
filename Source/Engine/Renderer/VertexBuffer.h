@@ -17,7 +17,7 @@ namespace neu
 		void CreateVertexBuffer(GLsizei size, GLsizei count, GLvoid* data);
 		void CreateIndexBuffer(GLenum indexType, GLsizei count, GLvoid* data);
 
-		void SetAttribute(GLuint index, GLint size, GLsizei stride, GLuint offset);
+		void SetAttribute(GLuint index, GLint size, GLsizei stride, GLsizei offset);
 
 	protected:
 		// vertex array

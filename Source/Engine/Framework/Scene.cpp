@@ -55,6 +55,11 @@ namespace neu {
             });
     }
 
+    void Scene::UpdateGui()
+    {
+        ImGui::ColorEdit3("Ambient", glm::value_ptr(m_ambientLight));
+    }
+
     /// <summary>
     /// Draws all actors in the scene using the specified renderer.
     /// 
@@ -77,9 +82,60 @@ namespace neu {
     /// - Actors may implement their own culling or LOD systems
     /// </summary>
     /// <param name="renderer">The renderer used to draw the actors.</param>
-    void Scene::Draw(Renderer& renderer) {
+    void Scene::Draw(Renderer& renderer) 
+    {
+        // Get Light
+        std::vector<LightComponent*> lights;
+        for (auto& actor : m_actors)
+        {
+            if (!actor->active) continue;
+            auto light = actor->GetComponent<LightComponent>();
+            if (light && light->active) lights.push_back(light);
+        }
+        // Get Camera
+        CameraComponent* camera = nullptr;
+        for (auto& actor : m_actors)
+        {
+            if (!actor->active) continue;
+            camera = actor->GetComponent<CameraComponent>();
+            if (camera && camera->active) break;
+        }
+        if (!camera)
+        {
+            LOG_WARNING("No camera active in scene");
+            return;
+        }
+
+        // Program
+        std::set<Program*> programs;
+        for (auto& actor : m_actors)
+        {
+            if (!actor->active) continue;
+            ModelRenderer* model = actor->GetComponent<ModelRenderer>();
+            if (!model || !model->active) continue;
+            if (model->material && model->material->program)
+            {
+                programs.insert(model->material->program.get());
+            }
+        }
+
+        for (auto& program : programs)
+        {
+            program->Use();
+            program->SetUniform("u_ambient_light", m_ambientLight);
+            program->SetUniform("u_numLights", (int)lights.size());
+            camera->SetProgram(*program);
+            int index = 0;
+            for (auto light : lights)
+            {
+                std::string lightName = "u_lights[" + std::to_string(index++) + "]";
+                light->SetProgram(*program, lightName, camera->view);
+            }
+        }
+
         // Iterate through all actors in the scene
-        for (auto& actor : m_actors) {
+        for (auto& actor : m_actors) 
+        {
             // Only render actors that are marked as active
             // This parallels the Update() logic for consistency
             if (actor->active) {

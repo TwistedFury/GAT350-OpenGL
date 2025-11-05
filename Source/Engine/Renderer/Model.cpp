@@ -54,12 +54,21 @@ namespace neu
 			vertex.tangent = (mesh->mTangents) ? glm::vec3{ mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z } : glm::vec3{ 0, 0, 0 };
 			vertices.push_back(vertex);
 		}
+		printf("Vertex sample (first 3):\n");
+		for (int i = 0; i < 3 && i < vertices.size(); i++) {
+			const auto& v = vertices[i];
+			printf("  pos=(%.2f %.2f %.2f)  norm=(%.2f %.2f %.2f)  uv=(%.2f %.2f)\n",
+				v.position.x, v.position.y, v.position.z,
+				v.normal.x, v.normal.y, v.normal.z,
+				v.texcoord.x, v.texcoord.y);
+		}
+
 		// create vertex buffer and attributes
 		auto vertexBuffer = std::make_shared<VertexBuffer>();
 		vertexBuffer->CreateVertexBuffer((GLsizei)(sizeof(Vertex) * vertices.size()), (GLsizei)vertices.size(), vertices.data());
 		vertexBuffer->SetAttribute(0, 3, sizeof(Vertex), offsetof(Vertex, position));
-		vertexBuffer->SetAttribute(1, 2, sizeof(Vertex), offsetof(Vertex, texcoord));
-		vertexBuffer->SetAttribute(2, 3, sizeof(Vertex), offsetof(Vertex, normal));
+		vertexBuffer->SetAttribute(1, 3, sizeof(Vertex), offsetof(Vertex, normal));
+		vertexBuffer->SetAttribute(2, 2, sizeof(Vertex), offsetof(Vertex, texcoord));
 		vertexBuffer->SetAttribute(3, 3, sizeof(Vertex), offsetof(Vertex, tangent));
 		// get model index vertices
 		std::vector<GLuint> indices;
