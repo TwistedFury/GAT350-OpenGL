@@ -7,10 +7,6 @@ int main(int argc, char* argv[]) {
     LOG_INFO("initialize engine...");
     neu::GetEngine().Initialize();
 
-    // Program
-    auto program = neu::Resources().Get<neu::Program>("shaders/basic_lit.prog");
-    program->Use();
-
     auto scene = std::make_unique<neu::Scene>();
     scene->Load("scenes/scene01.json");
     scene->Start();
@@ -31,11 +27,10 @@ int main(int argc, char* argv[]) {
 
         // update
         neu::GetEngine().Update();
-
-        editor->Begin();
-        editor->UpdateGui(*scene);
-
         float dt = neu::GetEngine().GetTime().GetDeltaTime();
+
+        // UPDATE SCENE
+        scene->Update(dt);
 
         // Take User Input
         if (neu::GetEngine().GetInput().GetKeyPressed(SDL_SCANCODE_ESCAPE)) quit = true;
@@ -43,7 +38,12 @@ int main(int argc, char* argv[]) {
         // draw
         neu::GetEngine().GetRenderer().Clear();
 
+        // DRAW SCENE
+        scene->Draw(neu::GetEngine().GetRenderer());
+
         // draw ImGui
+        editor->Begin();
+        editor->UpdateGui(*scene);
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

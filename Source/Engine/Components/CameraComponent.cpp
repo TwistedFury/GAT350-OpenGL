@@ -5,10 +5,24 @@ namespace neu
 {
 	FACTORY_REGISTER(CameraComponent);
 
-	void neu::CameraComponent::Update(float dt)
+	void CameraComponent::Update(float dt)
 	{
+		if (aspect <= 0.0f) {
+			aspect = GetEngine().GetRenderer().GetWidth() / (float)GetEngine().GetRenderer().GetHeight();
+		}
+
 		view = glm::lookAt(owner->transform.position, owner->transform.position + owner->transform.Forward(), owner->transform.Up());
 		projection = glm::perspective(glm::radians(fov), aspect, near, far);
+
+		// DEBUG - Log every frame to see if camera updates
+		static glm::vec3 lastPos = owner->transform.position;
+		if (lastPos != owner->transform.position) {
+			LOG_INFO("Camera moved to: ({}, {}, {})",
+				owner->transform.position.x,
+				owner->transform.position.y,
+				owner->transform.position.z);
+			lastPos = owner->transform.position;
+		}
 	}
 
 	void neu::CameraComponent::SetPerspective(float fov, float aspect, float near, float far)

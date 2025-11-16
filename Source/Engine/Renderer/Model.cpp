@@ -67,8 +67,8 @@ namespace neu
 		auto vertexBuffer = std::make_shared<VertexBuffer>();
 		vertexBuffer->CreateVertexBuffer((GLsizei)(sizeof(Vertex) * vertices.size()), (GLsizei)vertices.size(), vertices.data());
 		vertexBuffer->SetAttribute(0, 3, sizeof(Vertex), offsetof(Vertex, position));
-		vertexBuffer->SetAttribute(1, 3, sizeof(Vertex), offsetof(Vertex, normal));
-		vertexBuffer->SetAttribute(2, 2, sizeof(Vertex), offsetof(Vertex, texcoord));
+		vertexBuffer->SetAttribute(1, 2, sizeof(Vertex), offsetof(Vertex, texcoord));
+		vertexBuffer->SetAttribute(2, 3, sizeof(Vertex), offsetof(Vertex, normal));
 		vertexBuffer->SetAttribute(3, 3, sizeof(Vertex), offsetof(Vertex, tangent));
 		// get model index vertices
 		std::vector<GLuint> indices;

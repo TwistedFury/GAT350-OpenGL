@@ -208,17 +208,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Build\Assets\Materials\crate.mat" />
+    <None Include="..\..\Build\Assets\Materials\reflection.mat" />
+    <None Include="..\..\Build\Assets\Materials\refraction.mat" />
+    <None Include="..\..\Build\Assets\Materials\rocks.mat" />
+    <None Include="..\..\Build\Assets\Materials\skybox.mat" />
     <None Include="..\..\Build\Assets\Materials\spot.mat" />
     <None Include="..\..\Build\Assets\Scenes\scene01.json" />
+    <None Include="..\..\Build\Assets\Scenes\scene02.json" />
     <None Include="..\..\Build\Assets\Shaders\basic.frag" />
     <None Include="..\..\Build\Assets\Shaders\basic.prog" />
     <None Include="..\..\Build\Assets\Shaders\basic.vert" />
-    <None Include="..\..\Build\Assets\Shaders\basic_lit.frag" />
-    <None Include="..\..\Build\Assets\Shaders\basic_lit.prog" />
-    <None Include="..\..\Build\Assets\Shaders\basic_lit.vert" />
-    <None Include="..\..\Build\Assets\Shaders\basic_phong.frag" />
-    <None Include="..\..\Build\Assets\Shaders\basic_phong.prog" />
-    <None Include="..\..\Build\Assets\Shaders\basic_phong.vert" />
+    <None Include="..\..\Build\Assets\Shaders\lit_vertex.frag" />
+    <None Include="..\..\Build\Assets\Shaders\lit_vertex.prog" />
+    <None Include="..\..\Build\Assets\Shaders\lit_vertex.vert" />
+    <None Include="..\..\Build\Assets\Shaders\lit_phong.frag" />
+    <None Include="..\..\Build\Assets\Shaders\lit_phong.prog" />
+    <None Include="..\..\Build\Assets\Shaders\lit_phong.vert" />
+    <None Include="..\..\Build\Assets\Shaders\cubemap.frag" />
+    <None Include="..\..\Build\Assets\Shaders\reflection.prog" />
+    <None Include="..\..\Build\Assets\Shaders\reflection.vert" />
+    <None Include="..\..\Build\Assets\Shaders\refraction.prog" />
+    <None Include="..\..\Build\Assets\Shaders\refraction.vert" />
+    <None Include="..\..\Build\Assets\Shaders\skybox.prog" />
+    <None Include="..\..\Build\Assets\Shaders\skybox.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Build\Assets\Textures\2k_earth_nightmap.jpg" />

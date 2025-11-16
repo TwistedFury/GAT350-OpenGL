@@ -41,13 +41,13 @@
     <None Include="..\..\Build\Assets\Shaders\basic.frag">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="..\..\Build\Assets\Shaders\basic_lit.frag">
+    <None Include="..\..\Build\Assets\Shaders\lit_vertex.frag">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="..\..\Build\Assets\Shaders\basic_lit.vert">
+    <None Include="..\..\Build\Assets\Shaders\lit_vertex.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="..\..\Build\Assets\Shaders\basic_lit.prog">
+    <None Include="..\..\Build\Assets\Shaders\lit_vertex.prog">
       <Filter>Assets\Shaders</Filter>
     </None>
     <None Include="..\..\Build\Assets\Shaders\basic.prog">
@@ -56,16 +56,55 @@
     <None Include="..\..\Build\Assets\Scenes\scene01.json">
       <Filter>Assets\Scenes</Filter>
     </None>
-    <None Include="..\..\Build\Assets\Shaders\basic_phong.vert">
+    <None Include="..\..\Build\Assets\Shaders\lit_phong.vert">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="..\..\Build\Assets\Shaders\basic_phong.frag">
+    <None Include="..\..\Build\Assets\Shaders\lit_phong.frag">
       <Filter>Assets\Shaders</Filter>
     </None>
-    <None Include="..\..\Build\Assets\Shaders\basic_phong.prog">
+    <None Include="..\..\Build\Assets\Shaders\lit_phong.prog">
       <Filter>Assets\Shaders</Filter>
     </None>
     <None Include="..\..\Build\Assets\Materials\spot.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\crate.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Scenes\scene02.json">
+      <Filter>Assets\Scenes</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\rocks.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\skybox.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\skybox.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\cubemap.frag">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\skybox.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\reflection.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\refraction.vert">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\reflection.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Shaders\refraction.prog">
+      <Filter>Assets\Shaders</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\reflection.mat">
+      <Filter>Assets\Materials</Filter>
+    </None>
+    <None Include="..\..\Build\Assets\Materials\refraction.mat">
       <Filter>Assets\Materials</Filter>
     </None>
   </ItemGroup>

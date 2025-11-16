@@ -63,11 +63,6 @@ namespace neu
 	//	glVertexAttribPointer(index, size, m_indexType, GL_FALSE, stride, (void*)offset);
 	//}
 
-	// Members you should have:
-	GLuint m_vao = 0, m_vbo = 0, m_ebo = 0;
-	GLsizei m_vertexCount = 0, m_indexCount = 0;
-	GLenum  m_indexType = GL_UNSIGNED_INT;
-
 	// Create VAO+VBO and upload vertex data
 	void VertexBuffer::CreateVertexBuffer(GLsizei byteSize, GLsizei vertexCount, GLvoid* data) {
 		m_vertexCount = vertexCount;
@@ -87,10 +82,10 @@ namespace neu
 		m_indexCount = indexCount;
 
 		if (!m_vao) glGenVertexArrays(1, &m_vao);
-		if (!m_ebo) glGenBuffers(1, &m_ebo);
+		if (!m_ibo) glGenBuffers(1, &m_ibo);
 
 		glBindVertexArray(m_vao);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
 
 		GLsizeiptr idxBytes = (indexType == GL_UNSIGNED_SHORT ? 2 :
 			indexType == GL_UNSIGNED_BYTE ? 1 : 4) * (GLsizeiptr)indexCount;
@@ -110,6 +105,14 @@ namespace neu
 	// Draw using whichever path is available
 	void VertexBuffer::Draw(GLenum primitiveType) {
 		glBindVertexArray(m_vao);
+
+		// DEBUG
+		static int totalDraws = 0;
+		if (totalDraws++ < 9) {
+			LOG_INFO("    VBO Draw - VAO: {}, Indices: {}, Vertices: {}",
+				m_vao, m_indexCount, m_vertexCount);
+		}
+
 		if (m_indexCount > 0) {
 			glDrawElements(primitiveType, m_indexCount, m_indexType, (void*)0);
 		}

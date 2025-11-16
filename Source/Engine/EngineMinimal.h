@@ -5,6 +5,7 @@
 #include "Components/FirstPersonController.h"
 #include "Components/LightComponent.h"
 #include "Components/ModelRenderer.h"
+#include "Components/RotationComponent.h"
 
 // core
 #include "Core/Assert.h"
@@ -52,6 +53,7 @@
 #include "Audio/AudioSystem.h"
 
 // renderer
+#include "Renderer/CubeMap.h"
 #include "Renderer/Material.h"
 #include "Renderer/Model.h"
 #include "Renderer/Program.h"

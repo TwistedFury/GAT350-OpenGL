@@ -21,14 +21,34 @@ namespace neu {
     /// <param name="renderer">Reference to the Renderer that provides the SDL_Renderer context</param>
     /// <returns>True if the texture was successfully loaded and created; otherwise, false</returns>
     bool Texture::Load(const std::string& filename) {
-        // Load image onto a CPU-side surface
-        // SDL_image supports various formats: PNG, JPG, BMP, GIF, etc.
         SDL_Surface* surface = IMG_Load(filename.c_str());
         if (!surface) {
             LOG_ERROR("Could not load image: {}", filename);
             return false;
         }
-        
+
+        // MANUALLY FLIP THE SURFACE VERTICALLY
+        int pitch = surface->pitch;
+        int height = surface->h;
+        void* pixels = surface->pixels;
+
+        // Create a temporary buffer for one row
+        unsigned char* temp_row = new unsigned char[pitch];
+        unsigned char* pixel_data = (unsigned char*)pixels;
+
+        // Flip by swapping rows
+        for (int i = 0; i < height / 2; ++i) {
+            unsigned char* row1 = pixel_data + i * pitch;
+            unsigned char* row2 = pixel_data + (height - i - 1) * pitch;
+
+            // Swap row1 and row2
+            memcpy(temp_row, row1, pitch);
+            memcpy(row1, row2, pitch);
+            memcpy(row2, temp_row, pitch);
+        }
+
+        delete[] temp_row;
+
         const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(surface->format);
 
         int channels = details->bytes_per_pixel;
@@ -40,17 +60,15 @@ namespace neu {
 
         glTexImage2D(m_target, 0, internalFormat, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 
-        // Texture parameters
         glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(m_target, m_texture); // Re-bind (Sanity Check)
-
         SDL_DestroySurface(surface);
+
+        name = filename;
 
         return true;
     }

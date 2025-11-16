@@ -119,6 +119,13 @@ namespace neu {
             }
         }
 
+        // ADD THIS DEBUG:
+        static int frameCount = 0;
+        if (frameCount++ < 3) {
+            LOG_INFO("=== SCENE DRAW FRAME {} ===", frameCount);
+            LOG_INFO("  Lights: {}, Programs: {}", lights.size(), programs.size());
+        }
+
         for (auto& program : programs)
         {
             program->Use();
@@ -133,17 +140,25 @@ namespace neu {
             }
         }
 
-        // Iterate through all actors in the scene
-        for (auto& actor : m_actors) 
+        // Draw all non-skybox actors first
+        for (auto& actor : m_actors)
         {
-            // Only render actors that are marked as active
-            // This parallels the Update() logic for consistency
-            if (actor->active) {
-                // Pass the renderer to each actor
-                // Each actor is responsible for its own drawing implementation
+            if (actor->active && actor->name != "skybox") {
                 actor->Draw(renderer);
             }
         }
+
+        // Draw skybox with depth function that allows it to render where depth == far plane
+        glDepthFunc(GL_LEQUAL);  // Draw where depth <= 1.0
+        glDepthMask(GL_FALSE);   // Don't write to depth buffer
+        for (auto& actor : m_actors)
+        {
+            if (actor->active && actor->name == "skybox") {
+                actor->Draw(renderer);
+            }
+        }
+        glDepthMask(GL_TRUE);    // Re-enable depth writing
+        glDepthFunc(GL_LESS);    // Restore default
     }
 
     /// <summary>
@@ -304,10 +319,6 @@ namespace neu {
     /// </summary>
     /// <param name="value">Serialized data containing scene configuration</param>
     void Scene::Read(const serial_data_t& value) {
-        // Load base Object properties first (name, active, etc.)
-        // This calls the parent class's Read() implementation
-        Object::Read(value);
-
         // SECTION 1: Process prototype definitions
         // Check if the serialized data contains a "prototypes" section
         if (SERIAL_CONTAINS(value, prototypes)) {
