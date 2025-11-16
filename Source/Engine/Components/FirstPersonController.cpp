@@ -4,7 +4,7 @@
 namespace neu {
 	FACTORY_REGISTER(FirstPersonController)
 
-		bool FirstPersonController::Start()
+	bool FirstPersonController::Start()
 	{
 		glm::vec3 euler = owner->transform.GetRotation();
 		pitch = euler.x;
