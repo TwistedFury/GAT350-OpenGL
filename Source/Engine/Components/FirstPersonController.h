@@ -3,7 +3,7 @@
 namespace neu {
 	class FirstPersonController : public Component {
 	public:
-		CLASS_PROTOTYPE(FirstPersonController);
+		CLASS_PROTOTYPE(FirstPersonController)
 
 		bool Start() override;
 		void Update(float dt) override;

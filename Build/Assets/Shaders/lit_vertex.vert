@@ -101,8 +101,7 @@ vec3 calculateLight(in Light light, in vec3 position, in vec3 normal)
 
 void main()
 {
-	vec2 uv = vec2(a_texcoord.x, 1.0 - a_texcoord.y);  // flip U (mirror horizontally)
-	vs_out.texcoord = uv;
+	vs_out.texcoord = a_texcoord;
 	mat4 model_view = u_view * u_model;
 	vec3 position = vec3(model_view * vec4(a_position, 1));
 	vec3 normal = normalize(mat3(model_view) * a_normal);

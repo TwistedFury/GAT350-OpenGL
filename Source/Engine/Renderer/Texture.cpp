@@ -27,28 +27,6 @@ namespace neu {
             return false;
         }
 
-        // MANUALLY FLIP THE SURFACE VERTICALLY
-        int pitch = surface->pitch;
-        int height = surface->h;
-        void* pixels = surface->pixels;
-
-        // Create a temporary buffer for one row
-        unsigned char* temp_row = new unsigned char[pitch];
-        unsigned char* pixel_data = (unsigned char*)pixels;
-
-        // Flip by swapping rows
-        for (int i = 0; i < height / 2; ++i) {
-            unsigned char* row1 = pixel_data + i * pitch;
-            unsigned char* row2 = pixel_data + (height - i - 1) * pitch;
-
-            // Swap row1 and row2
-            memcpy(temp_row, row1, pitch);
-            memcpy(row1, row2, pitch);
-            memcpy(row2, temp_row, pitch);
-        }
-
-        delete[] temp_row;
-
         const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(surface->format);
 
         int channels = details->bytes_per_pixel;

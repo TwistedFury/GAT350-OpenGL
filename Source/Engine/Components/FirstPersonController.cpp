@@ -7,8 +7,8 @@ namespace neu {
 	bool FirstPersonController::Start()
 	{
 		glm::vec3 euler = owner->transform.GetRotation();
-		pitch = euler.x;
-		yaw = euler.y;
+		pitch = euler.y;
+		yaw = euler.x;
 
 		return true;
 	}
@@ -21,12 +21,15 @@ namespace neu {
 
 			yaw -= axis.x;
 			pitch -= axis.y;
+
+			// Clamp pitch to prevent flipping
 			pitch = glm::clamp(pitch, -89.0f, 89.0f);
 		}
 
-		//owner->transform.SetRotation(glm::vec3(pitch, yaw, 0.0f));
-
-		glm::quat q = glm::quat_cast(glm::eulerAngleYXZ(glm::radians(yaw), glm::radians(pitch), 0.0f));
+		// Manual quaternion construction - pitch around X, yaw around Y
+		glm::quat qPitch = glm::angleAxis(glm::radians(pitch), glm::vec3(1, 0, 0));
+		glm::quat qYaw = glm::angleAxis(glm::radians(yaw), glm::vec3(0, 1, 0));
+		glm::quat q = qYaw * qPitch;  // Apply yaw first, then pitch
 		owner->transform.SetRotationQuat(q);
 
 		glm::vec3 direction{ 0 };
@@ -51,5 +54,11 @@ namespace neu {
 	void FirstPersonController::UpdateGui() {
 		ImGui::DragFloat("Speed", &speed, 0.1f);
 		ImGui::DragFloat("Sensitivity", &sensitivity, 0.1f);
+
+		// Show actual camera orientation
+		ImGui::Separator();
+		ImGui::Text("Camera Orientation:");
+		ImGui::Text("  Pitch: %.1f", pitch);
+		ImGui::Text("  Yaw: %.1f", yaw);
 	}
 }

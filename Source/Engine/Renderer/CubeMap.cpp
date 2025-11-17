@@ -35,26 +35,6 @@ namespace neu
                 return false;
             }
 
-            // FLIP THE SURFACE VERTICALLY
-            int pitch = surface->pitch;
-            int height = surface->h;
-            void* pixels = surface->pixels;
-
-            unsigned char* temp_row = new unsigned char[pitch];
-            unsigned char* pixel_data = (unsigned char*)pixels;
-
-            for (int row = 0; row < height / 2; ++row) {
-                unsigned char* row1 = pixel_data + row * pitch;
-                unsigned char* row2 = pixel_data + (height - row - 1) * pitch;
-
-                memcpy(temp_row, row1, pitch);
-                memcpy(row1, row2, pitch);
-                memcpy(row2, temp_row, pitch);
-            }
-
-            delete[] temp_row;
-            // END FLIP
-
             const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(surface->format);
 
             int channels = details->bytes_per_pixel;
