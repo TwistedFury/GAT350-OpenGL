@@ -414,10 +414,10 @@ Shaders receive uniform data from `LightComponent::SetProgram`, enabling Phong o
 
 > Add your own screenshots to the repository (for example under `docs/images/`) and update these paths.
 
-### Environment-Mapped Squirrel / Cow
+### Environment-Mapped / Cow (Chrome Cow)
 
 <p align="center">
-  <img src="docs/images/reflection-cow.png" alt="Reflective character with ocean skybox" width="650">
+  <img src="docs/images/chrome_cow.png" alt="Reflective cow with ocean skybox" width="650">
   <br/>
   <em>Real-time reflection using cubemap environment mapping.</em>
 </p>
@@ -426,7 +426,7 @@ Shaders receive uniform data from `LightComponent::SetProgram`, enabling Phong o
 ### Diffuse Cow with Material Inspector
 
 <p align="center">
-  <img src="docs/images/diffuse-cow.png" alt="Diffuse cow with ImGui material inspector" width="650">
+  <img src="docs/images/diffuse_cow.png" alt="Diffuse cow with ImGui material inspector" width="650">
   <br/>
   <em>Inspector editing material textures, shininess, and index of refraction at runtime.</em>
 </p>
@@ -434,7 +434,7 @@ Shaders receive uniform data from `LightComponent::SetProgram`, enabling Phong o
 ### Phong-Lit Moon
 
 <p align="center">
-  <img src="docs/images/moon.png" alt="Phong-lit moon model" width="650">
+  <img src="docs/images/phong_moon.png" alt="Phong-lit moon model" width="650">
   <br/>
   <em>Phong shading on a textured sphere with a single light source.</em>
 </p>
