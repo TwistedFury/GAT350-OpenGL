@@ -112,7 +112,7 @@ namespace neu {
         // get shadow camera projection view matrix
         auto shadowCamera = std::find_if(cameras.begin(), cameras.end(),
             [](auto camera) { return camera->shadowCamera; });
-        if (*shadowCamera) {
+        if (shadowCamera != cameras.end()) {
             glm::mat4 biasMatrix(
                 0.5, 0.0, 0.0, 0.0,
                 0.0, 0.5, 0.0, 0.0,
@@ -147,16 +147,16 @@ namespace neu {
                 glViewport(0, 0, renderer.GetWidth(), renderer.GetHeight());
             }
 
-            if (renderToTexture && postprocessComponent)
-            {
-                camera->Clear();
-                auto postprocessProgram = Resources().Get<Program>("shaders/postprocess.prog");
-                postprocessProgram->Use();
-                postprocessComponent->Apply(*postprocessProgram);
-                camera->outputTexture->Bind();
-                auto actor = GetActorByName("postprocess");
-                actor->Draw(renderer);
-            }
+            //if (renderToTexture && postprocessComponent)
+            //{
+            //    camera->Clear();
+            //    auto postprocessProgram = Resources().Get<Program>("shaders/postprocess.prog");
+            //    postprocessProgram->Use();
+            //    postprocessComponent->Apply(*postprocessProgram);
+            //    camera->outputTexture->Bind();
+            //    auto actor = GetActorByName("postprocess");
+            //    actor->Draw(renderer);
+            //}
         }
     }
 

@@ -2,23 +2,53 @@
 #include <SDL3/SDL.h>
 
 namespace neu {
+    namespace {
+        inline bool IsContextCurrentAndValid()
+        {
+            void* ctx = SDL_GL_GetCurrentContext();
+            if (ctx == nullptr) {
+                LOG_ERROR("OpenGL error: no current context on this thread");
+                return false;
+            }
+            return true;
+        }
+
+        inline bool IsProgramValid(GLuint prog)
+        {
+            if (prog == 0) {
+                LOG_ERROR("OpenGL error: program handle is 0");
+                return false;
+            }
+            GLboolean isProgram = glIsProgram(prog);
+            if (isProgram == GL_FALSE) {
+                LOG_ERROR("OpenGL error: handle {} is not a valid program in current context", prog);
+                return false;
+            }
+            return true;
+        }
+    }
+
     Program::Program() {
-        // Do not touch GL until a context is current
         m_program = 0;
     }
 
     Program::~Program()
     {
-        glDeleteProgram(m_program);
+        // Only delete if a GL context is current; avoid driver faults during shutdown.
+        if (SDL_GL_GetCurrentContext() != nullptr && m_program != 0) {
+            GLboolean isProgram = glIsProgram(m_program);
+            if (isProgram == GL_TRUE) {
+                glDeleteProgram(m_program);
+            }
+        }
+        m_program = 0;
     }
 
     bool Program::Load(const std::string& filename) {
+        if (!IsContextCurrentAndValid()) return false;
+
         void* ctx = SDL_GL_GetCurrentContext();
         LOG_INFO("Program::Load ctx={} prog={}", ctx, m_program);
-        if (ctx == nullptr) {
-            LOG_ERROR("Program::Load failed: no current OpenGL context");
-            return false;
-        }
 
         serial::document_t document;
         if (!serial::Load(filename, document)) {
@@ -26,7 +56,13 @@ namespace neu {
             return false;
         }
 
-        if (m_program == 0) m_program = glCreateProgram();
+        if (m_program == 0) {
+            m_program = glCreateProgram();
+            if (m_program == 0) {
+                LOG_ERROR("Program::Load failed: glCreateProgram returned 0");
+                return false;
+            }
+        }
         LOG_INFO("Program state after create: prog={} ctx={}", m_program, ctx);
 
         std::string shaderName;
@@ -59,6 +95,8 @@ namespace neu {
     }
 
     void Program::AttachShader(std::shared_ptr<Shader> shader) {
+        if (!IsContextCurrentAndValid()) return;
+
         void* ctx = SDL_GL_GetCurrentContext();
         LOG_INFO("Program::AttachShader ctx={} prog={} shader={}", ctx, m_program, shader ? shader->m_shader : 0u);
 
@@ -66,41 +104,49 @@ namespace neu {
             LOG_ERROR("AttachShader failed: shader null/not compiled");
             return;
         }
-        if (ctx == nullptr) {
-            LOG_ERROR("AttachShader failed: no current OpenGL context");
-            return;
-        }
-        if (!m_program) {
+        if (m_program == 0) {
             m_program = glCreateProgram();
-            if (!m_program) {
-                LOG_ERROR("AttachShader failed: program not created");
+            if (m_program == 0) {
+                LOG_ERROR("AttachShader failed: glCreateProgram returned 0");
                 return;
             }
         }
+        if (!IsProgramValid(m_program)) return;
+
         glAttachShader(m_program, shader->m_shader);
     }
 
     bool Program::Link() {
+        if (!IsContextCurrentAndValid()) return false;
+        if (!IsProgramValid(m_program)) return false;
+
         void* ctx = SDL_GL_GetCurrentContext();
         LOG_INFO("Program::Link ctx={} prog={}", ctx, m_program);
-        if (ctx == nullptr) {
-            LOG_ERROR("Program::Link failed: no current OpenGL context");
+
+        GLint attached = 0;
+        glGetProgramiv(m_program, GL_ATTACHED_SHADERS, &attached);
+        if (attached == 0) {
+            LOG_ERROR("Program::Link failed: no shaders attached to program {}", m_program);
             return false;
         }
 
         glLinkProgram(m_program);
-        GLint success{};
+
+        GLint success = GL_FALSE;
         glGetProgramiv(m_program, GL_LINK_STATUS, &success);
-        if (!success) {
+        if (success == GL_FALSE) {
             GLchar info[1024];
-            GLsizei len{};
+            GLsizei len = 0;
             glGetProgramInfoLog(m_program, sizeof(info), &len, info);
             LOG_ERROR("Program link failed: {}", std::string(info, len));
+            return false;
         }
-        return success != 0;
+        return true;
     }
 
     void Program::Use() {
+        if (!IsContextCurrentAndValid()) return;
+        if (!IsProgramValid(m_program)) return;
         glUseProgram(m_program);
     }
 

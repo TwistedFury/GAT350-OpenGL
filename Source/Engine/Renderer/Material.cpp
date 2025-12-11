@@ -226,6 +226,11 @@ namespace neu
         program->SetUniform("u_material.offset", offset);
         program->SetUniform("u_material.parameters", (uint8_t)parameters);
         program->SetUniform("u_ior", ior);
+
+        err = glGetError();
+        if (err != GL_NO_ERROR) {
+            LOG_ERROR("Material::Bind - GL Error after SetUniform: 0x{:X}", err);
+        }
     }
 
     void Material::UpdateGui()

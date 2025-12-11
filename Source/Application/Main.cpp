@@ -10,21 +10,21 @@ int main(int argc, char* argv[]) {
     SDL_Event e;
     bool quit = false;
 
-    auto renderTexture = std::make_shared<neu::RenderTexture>();
-    renderTexture->Create(512, 512);
-    neu::Resources().AddResource("renderTexture", renderTexture);
+    //auto renderTexture = std::make_shared<neu::RenderTexture>();
+    //renderTexture->Create(512, 512);
+    //neu::Resources().AddResource("renderTexture", renderTexture);
 
-    renderTexture = std::make_shared<neu::RenderTexture>();
-    renderTexture->Create(1024, 1024);
-    neu::Resources().AddResource("postprocessTexture", renderTexture);
+    //renderTexture = std::make_shared<neu::RenderTexture>();
+    //renderTexture->Create(1024, 1024);
+    //neu::Resources().AddResource("postprocessTexture", renderTexture);
 
-    renderTexture = std::make_shared<neu::RenderTexture>();
-    renderTexture->CreateDepth(1024, 1024); // Shadow clarity
-    neu::Resources().AddResource("shadowTexture", renderTexture);
+    //renderTexture = std::make_shared<neu::RenderTexture>();
+    //renderTexture->CreateDepth(1024, 1024); // Shadow clarity
+    //neu::Resources().AddResource("shadowTexture", renderTexture);
     
 
     auto scene = std::make_unique<neu::Scene>();
-    scene->Load("scenes/scene03.json");
+    scene->Load("scenes/scene01.json");
     scene->Start();
     auto editor = std::make_unique<neu::Editor>();
 
