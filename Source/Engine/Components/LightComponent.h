@@ -27,6 +27,8 @@ namespace neu {
 		float intensity{ 1 };
 		float range{ 20 };
 
+		bool shadowCaster{ false };
+
 		LightType lightType{ LightType::Point };
 		float outerSpotAngle{ 30.0f };
 		float innerSpotAngle{ 10.0f };

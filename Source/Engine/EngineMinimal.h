@@ -1,10 +1,14 @@
 #pragma once
 
+// ImGui Math
+#define IMGUI_DEFINE_MATH_OPERATORS
+
 // components
 #include "Components/CameraComponent.h"
 #include "Components/FirstPersonController.h"
 #include "Components/LightComponent.h"
 #include "Components/ModelRenderer.h"
+#include "Components/PostProcessComponent.h"
 #include "Components/RotationComponent.h"
 
 // core
@@ -58,6 +62,7 @@
 #include "Renderer/Model.h"
 #include "Renderer/Program.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/RenderTexture.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
 #include "Renderer/TextureAnimation.h"

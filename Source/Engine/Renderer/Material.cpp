@@ -22,34 +22,79 @@ namespace neu
             return false;
         }
 
+        // Helper lambda to check if a name looks like a file path
+        auto isFilePath = [](const std::string& name) {
+            return name.find('/') != std::string::npos ||
+                name.find('\\') != std::string::npos ||
+                name.find('.') != std::string::npos;
+            };
+
         //texture
         std::string textureName;
+
+        // baseMap
         SERIAL_READ_NAME(document, "baseMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading baseMap: {}", textureName);
-            baseMap = Resources().Get<Texture>(textureName);
+            if (isFilePath(textureName)) {
+                baseMap = Resources().Get<Texture>(textureName);
+            }
+            else {
+                baseMap = Resources().Get<RenderTexture>(textureName);
+                if (!baseMap) baseMap = Resources().Get<Texture>(textureName);
+            }
             if (!baseMap) LOG_ERROR("Failed to load baseMap: {}", textureName);
         }
 
+        // specularMap
         SERIAL_READ_NAME(document, "specularMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading specularMap: {}", textureName);
-            specularMap = Resources().Get<Texture>(textureName);
+            if (isFilePath(textureName)) {
+                specularMap = Resources().Get<Texture>(textureName);
+            }
+            else {
+                specularMap = Resources().Get<RenderTexture>(textureName);
+                if (!specularMap) specularMap = Resources().Get<Texture>(textureName);
+            }
             if (!specularMap) LOG_ERROR("Failed to load specularMap: {}", textureName);
         }
 
+        // emissiveMap
         SERIAL_READ_NAME(document, "emissiveMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading emissiveMap: {}", textureName);
-            emissiveMap = Resources().Get<Texture>(textureName);
+            if (isFilePath(textureName)) {
+                emissiveMap = Resources().Get<Texture>(textureName);
+            }
+            else {
+                emissiveMap = Resources().Get<RenderTexture>(textureName);
+                if (!emissiveMap) emissiveMap = Resources().Get<Texture>(textureName);
+            }
             if (!emissiveMap) LOG_ERROR("Failed to load emissiveMap: {}", textureName);
         }
 
+        // normalMap
         SERIAL_READ_NAME(document, "normalMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading normalMap: {}", textureName);
-            normalMap = Resources().Get<Texture>(textureName);
+            if (isFilePath(textureName)) {
+                normalMap = Resources().Get<Texture>(textureName);
+            }
+            else {
+                normalMap = Resources().Get<RenderTexture>(textureName);
+                if (!normalMap) normalMap = Resources().Get<Texture>(textureName);
+            }
             if (!normalMap) LOG_ERROR("Failed to load normalMap: {}", textureName);
+        }
+
+        // shadowMap - always try RenderTexture first (shadows are usually RTTs)
+        SERIAL_READ_NAME(document, "shadowMap", textureName);
+        if (!textureName.empty()) {
+            LOG_INFO("Loading shadowMap: {}", textureName);
+            shadowMap = Resources().Get<RenderTexture>(textureName);
+            if (!shadowMap) shadowMap = Resources().Get<Texture>(textureName);
+            if (!shadowMap) LOG_ERROR("Failed to load shadowMap: {}", textureName);
         }
 
         SERIAL_READ_NAME(document, "cubeMap", textureName);
@@ -67,6 +112,12 @@ namespace neu
     }
 
     void Material::Bind() {
+        // Clear ALL pending errors before we start
+        GLenum err;
+        while ((err = glGetError()) != GL_NO_ERROR) {
+            LOG_WARNING("Material::Bind - Clearing stale GL error: 0x{:X}", err);
+        }
+
         parameters = Parameters::None;
 
         // CHECK FOR VALID PROGRAM
@@ -77,6 +128,12 @@ namespace neu
 
         program->Use();
 
+        // CHECK AFTER glUseProgram
+        err = glGetError();
+        if (err != GL_NO_ERROR) {
+            LOG_ERROR("Material::Bind - GL Error after glUseProgram: 0x{:X}", err);
+        }
+
         // CHECK EACH TEXTURE BEFORE BINDING
         if (baseMap) {
             if (baseMap->m_texture == 0) {
@@ -84,9 +141,19 @@ namespace neu
             }
             else {
                 baseMap->SetActive(GL_TEXTURE0);
+                err = glGetError();
+                if (err != GL_NO_ERROR) LOG_ERROR("Material::Bind - Error after SetActive(GL_TEXTURE0): 0x{:X}", err);
+
                 baseMap->Bind();
+                err = glGetError();
+                if (err != GL_NO_ERROR) LOG_ERROR("Material::Bind - Error after baseMap->Bind(): 0x{:X}", err);
+
                 program->SetUniform("u_baseMap", 0);
+                err = glGetError();
+                if (err != GL_NO_ERROR) LOG_ERROR("Material::Bind - Error after SetUniform u_baseMap: 0x{:X}", err);
+
                 parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::BaseMap);
+                LOG_INFO("Bound baseMap to unit 0, texture ID: {}", baseMap->m_texture);
             }
         }
 
@@ -116,10 +183,15 @@ namespace neu
 
         if (normalMap)
         {
-            normalMap->SetActive(GL_TEXTURE3);
-            normalMap->Bind();
-            program->SetUniform("u_normalMap", 3);
-            parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::NormalMap);
+            if (normalMap->m_texture == 0) {
+                LOG_ERROR("Material::Bind - normalMap texture invalid (ID=0)!");
+            }
+            else {
+                normalMap->SetActive(GL_TEXTURE3);
+                normalMap->Bind();
+                program->SetUniform("u_normalMap", 3);
+                parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::NormalMap);
+            }
         }
 
         if (cubeMap)
@@ -129,6 +201,23 @@ namespace neu
             program->SetUniform("u_cubeMap", 4);
             parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::CubeMap);
         }
+
+        //if (shadowMap)
+        //{
+        //    if (shadowMap->m_texture == 0) {
+        //        LOG_ERROR("Material::Bind - shadowMap texture invalid (ID=0)!");
+        //    }
+        //    else {
+        //        shadowMap->SetActive(GL_TEXTURE5);
+        //        shadowMap->Bind();
+        //        program->SetUniform("u_shadowMap", 5);
+        //        parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::ShadowMap);
+        //        LOG_INFO("Bound shadowMap to unit 5, texture ID: {}", shadowMap->m_texture);
+        //    }
+        //}
+        //else {
+        //    LOG_WARNING("Material::Bind - shadowMap is nullptr!");
+        //}
 
         program->SetUniform("u_material.baseColor", baseColor);
         program->SetUniform("u_material.emissiveColor", emissiveColor);
@@ -141,12 +230,15 @@ namespace neu
 
     void Material::UpdateGui()
     {
+        std::string text;
         if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::Text("Name: %s", name.c_str());
             ImGui::Text("Shader: %s", program->name.c_str());
 
-            if (baseMap) ImGui::Text("Base Map: %s", baseMap->name.c_str());
+            text = (baseMap) ? baseMap->name : "none";
+            ImGui::Text("Base Map: %s", baseMap->name.c_str());
             ImGui::ColorEdit3("Base Color", glm::value_ptr(baseColor));
+            Editor::GetDialogResource<Texture>(baseMap, "BaseMapDialog", "Open texture", "Image (*.png;*.bmp;*.jpeg;*.jpg;*.tga){.png,.bmp,.jpeg,.jpg,.tga},.*");
 
             if (specularMap) ImGui::Text("Specular Map: %s", specularMap->name.c_str());
 

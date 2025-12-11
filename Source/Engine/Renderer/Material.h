@@ -15,7 +15,8 @@ namespace neu {
             SpecularMap = (1 << 1),
             EmissiveMap = (1 << 2),
             NormalMap   = (1 << 3),
-            CubeMap     = (1 << 4)
+            CubeMap     = (1 << 4),
+            ShadowMap   = (1 << 5)
         };
 
         Material() = default;
@@ -37,7 +38,9 @@ namespace neu {
         res_t<Texture> specularMap;
         res_t<Texture> emissiveMap;
         res_t<Texture> normalMap;
+        res_t<Texture> shadowMap;
         res_t<CubeMap> cubeMap;
+
         glm::vec3 baseColor{ 1, 1, 1 };
         glm::vec3 emissiveColor{ 0, 0, 0 };
 

@@ -31,11 +31,9 @@ namespace neu
 		void SetUniform(const std::string& name, const glm::mat3& value);
 		void SetUniform(const std::string& name, const glm::mat4& value);
 
+		GLint GetUniformLocation(const std::string& name);
 	public:
 		GLuint m_program = 0;
 		std::map<std::string, GLint> m_uniformLocations;
-
-	private:
-		GLint GetUniformLocation(const std::string& name);
 	};
 }

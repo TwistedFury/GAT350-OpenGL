@@ -12,6 +12,7 @@ namespace neu
 
 		void Update(float dt) override;
 		void Draw(class Renderer& renderer) override;
+		void DrawShadow(class Renderer& renderer, class Program& program);
 		void Read(const serial_data_t& value);
 
 		void UpdateGui() override;

@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>;IMGUI_IMPL_OPENGL_LOADER_CUSTOM_CRT_SECURE_NO_WARNINGSAPIENTRY=__stdcall</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui;$(SolutionDir)Source\ThirdParty\imgui-filedialog</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>EnginePCH.h</ForcedIncludeFiles>
@@ -119,7 +119,7 @@
       <PreprocessorDefinitions>;IMGUI_IMPL_OPENGL_LOADER_CUSTOM_CRT_SECURE_NO_WARNINGSAPIENTRY=__stdcall</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui;$(SolutionDir)Source\ThirdParty\imgui-filedialog</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>EnginePCH.h</ForcedIncludeFiles>
@@ -143,7 +143,7 @@
       <PreprocessorDefinitions>;IMGUI_IMPL_OPENGL_LOADER_CUSTOM_CRT_SECURE_NO_WARNINGSAPIENTRY=__stdcall</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui;$(SolutionDir)Source\ThirdParty\imgui-filedialog</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>EnginePCH.h</ForcedIncludeFiles>
@@ -169,7 +169,7 @@
       <PreprocessorDefinitions>;IMGUI_IMPL_OPENGL_LOADER_CUSTOM_CRT_SECURE_NO_WARNINGSAPIENTRY=__stdcall</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Engine;$(SolutionDir)Source\ThirdParty\SDL3\include;$(SolutionDir)Source\ThirdParty\fmod\core\inc;$(SolutionDir)Source\ThirdParty\rapidjson\include;$(SolutionDir)Source\ThirdParty\glad\include;$(SolutionDir)Source\ThirdParty\glm\glm;$(SolutionDir)Source\ThirdParty\assimp\include;$(SolutionDir)Source\ThirdParty\imgui;$(SolutionDir)Source\ThirdParty\imgui-filedialog</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>EnginePCH.h</ForcedIncludeFiles>
@@ -201,6 +201,7 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\ThirdParty\imgui-filedialog\ImGuiFileDialog.cpp" />
     <ClCompile Include="..\ThirdParty\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\ThirdParty\imgui\backends\imgui_impl_sdl3.cpp" />
     <ClCompile Include="..\ThirdParty\imgui\imgui.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Components\FirstPersonController.cpp" />
     <ClCompile Include="Components\LightComponent.cpp" />
     <ClCompile Include="Components\ModelRenderer.cpp" />
+    <ClCompile Include="Components\PostProcessComponent.cpp" />
     <ClCompile Include="Components\RotationComponent.cpp" />
     <ClCompile Include="Core\File.cpp" />
     <ClCompile Include="Core\Json.cpp" />
@@ -238,6 +240,7 @@
     <ClCompile Include="Renderer\Model.cpp" />
     <ClCompile Include="Renderer\Program.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Renderer\RenderTexture.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
     <ClCompile Include="Renderer\Texture.cpp" />
     <ClCompile Include="Renderer\TextureAnimation.cpp" />
@@ -251,6 +254,7 @@
     <ClInclude Include="Components\FirstPersonController.h" />
     <ClInclude Include="Components\LightComponent.h" />
     <ClInclude Include="Components\ModelRenderer.h" />
+    <ClInclude Include="Components\PostProcessComponent.h" />
     <ClInclude Include="Components\RendererComponent.h" />
     <ClInclude Include="Components\RotationComponent.h" />
     <ClInclude Include="Core\Assert.h" />
@@ -287,6 +291,7 @@
     <ClInclude Include="Renderer\Model.h" />
     <ClInclude Include="Renderer\Program.h" />
     <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Renderer\RenderTexture.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\Texture.h" />
     <ClInclude Include="Renderer\TextureAnimation.h" />

@@ -58,6 +58,7 @@ namespace neu {
     void Scene::UpdateGui()
     {
         ImGui::ColorEdit3("Ambient", glm::value_ptr(m_ambientLight));
+        ImGui::Checkbox("PostFX", &m_postprocess);
     }
 
     /// <summary>
@@ -85,29 +86,18 @@ namespace neu {
     void Scene::Draw(Renderer& renderer) 
     {
         // Get Light
-        std::vector<LightComponent*> lights;
-        for (auto& actor : m_actors)
-        {
-            if (!actor->active) continue;
-            auto light = actor->GetComponent<LightComponent>();
-            if (light && light->active) lights.push_back(light);
-        }
+        auto lights = GetActorComponents<LightComponent>();
+
         // Get Camera
-        CameraComponent* camera = nullptr;
-        for (auto& actor : m_actors)
-        {
-            if (!actor->active) continue;
-            camera = actor->GetComponent<CameraComponent>();
-            if (camera && camera->active) break;
-        }
-        if (!camera)
+        auto cameras = GetActorComponents<CameraComponent>();
+        if (cameras.empty())
         {
             LOG_WARNING("No camera active in scene");
             return;
         }
 
         // Program
-        std::set<Program*> programs;
+        std::set<Program*> programSet;
         for (auto& actor : m_actors)
         {
             if (!actor->active) continue;
@@ -115,11 +105,67 @@ namespace neu {
             if (!model || !model->active) continue;
             if (model->material && model->material->program)
             {
-                programs.insert(model->material->program.get());
+                programSet.insert(model->material->program.get());
             }
         }
+        std::vector<Program*> programs(programSet.begin(), programSet.end());
+        // get shadow camera projection view matrix
+        auto shadowCamera = std::find_if(cameras.begin(), cameras.end(),
+            [](auto camera) { return camera->shadowCamera; });
+        if (*shadowCamera) {
+            glm::mat4 biasMatrix(
+                0.5, 0.0, 0.0, 0.0,
+                0.0, 0.5, 0.0, 0.0,
+                0.0, 0.0, 0.5, 0.0,
+                0.5, 0.5, 0.5, 1.0
+            );
+            glm::mat4 shadowvp = biasMatrix * (*shadowCamera)->projection * (*shadowCamera)->view;
+            for (auto& program : programs) {
+                program->Use();
+                // Only set if the uniform exists in this program
+                GLint loc = program->GetUniformLocation("u_shadow_vp");
+                if (loc != -1) {
+                    program->SetUniform("u_shadow_vp", shadowvp);
+                }
+            }
+        }
+        for (auto& camera : cameras)
+        {
+            PostProcessComponent* postprocessComponent = camera->owner->GetComponent<PostProcessComponent>();
+            bool renderToTexture = camera->outputTexture && (!postprocessComponent || postprocessComponent && m_postprocess);
+            if (renderToTexture)
+            {
+                camera->outputTexture->BindFramebuffer();
+                glViewport(0, 0, camera->outputTexture->m_size.x, camera->outputTexture->m_size.y);
+            }
+            camera->Clear();
 
-        // ADD THIS DEBUG:
+            DrawPass(renderer, programs, lights, camera);
+            if (renderToTexture)
+            {
+                camera->outputTexture->UnbindFramebuffer();
+                glViewport(0, 0, renderer.GetWidth(), renderer.GetHeight());
+            }
+
+            if (renderToTexture && postprocessComponent)
+            {
+                camera->Clear();
+                auto postprocessProgram = Resources().Get<Program>("shaders/postprocess.prog");
+                postprocessProgram->Use();
+                postprocessComponent->Apply(*postprocessProgram);
+                camera->outputTexture->Bind();
+                auto actor = GetActorByName("postprocess");
+                actor->Draw(renderer);
+            }
+        }
+    }
+
+    void Scene::DrawPass(Renderer& renderer, 
+        std::vector<Program*>& programs, 
+        std::vector<LightComponent*>& lights, 
+        CameraComponent* camera)
+    {
+        // DEBUG CHECK
         static int frameCount = 0;
         if (frameCount++ < 3) {
             LOG_INFO("=== SCENE DRAW FRAME {} ===", frameCount);
@@ -321,6 +367,9 @@ namespace neu {
     void Scene::Read(const serial_data_t& value) {
         // SECTION 1: Process prototype definitions
         // Check if the serialized data contains a "prototypes" section
+        SERIAL_READ_NAME(value, "ambient_light", m_ambientLight);
+        SERIAL_READ_NAME(value, "postprocess", m_postprocess);
+
         if (SERIAL_CONTAINS(value, prototypes)) {
             // Iterate through each prototype definition in the array
             for (auto& actorValue : SERIAL_AT(value, prototypes).GetArray()) {

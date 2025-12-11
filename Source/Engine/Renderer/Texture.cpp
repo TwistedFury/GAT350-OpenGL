@@ -27,6 +27,9 @@ namespace neu {
             return false;
         }
 
+        m_size.x = surface->w;
+        m_size.y = surface->h;
+
         const SDL_PixelFormatDetails* details = SDL_GetPixelFormatDetails(surface->format);
 
         int channels = details->bytes_per_pixel;

@@ -85,7 +85,7 @@ vec3 calculateLight(in Light light, in vec3 position, in vec3 normal, in float s
 		break;
 
 		case DIRECTIONAL:
-			light_dir = normalize(light.direction);
+			light_dir = -light.direction;
 		break;
 		
 		case SPOT:
@@ -94,7 +94,7 @@ vec3 calculateLight(in Light light, in vec3 position, in vec3 normal, in float s
 			light_distance = distance(light.position, position);
 			attenuation = calculateAttenuation(light_distance, light.range);
 
-			float angle = acos(dot(light_dir, light.direction));
+			float angle = acos(dot(light_dir, -light.direction));
 			if (angle > light.outerSpotAngle) attenuation = 0;
 			else {
 				attenuation *= smoothstep(light.outerSpotAngle, light.innerSpotAngle, angle);
@@ -141,5 +141,6 @@ void main()
 		? texture(u_emissiveMap, fs_in.texcoord) + vec4(u_material.emissiveColor, 1)
 		: vec4(u_material.emissiveColor, 1);
 
-	f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1) + emissive;
+	//f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1) + emissive;
+	f_color = vec4(gl_FragCoord.z);
 }
