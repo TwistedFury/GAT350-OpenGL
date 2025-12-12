@@ -161,6 +161,9 @@
     <None Include="..\..\Build\Assets\Shaders\lit_phong_shadow.prog">
       <Filter>Assets\Shaders</Filter>
     </None>
+    <None Include="..\..\Build\Assets\Scenes\scene04.json">
+      <Filter>Assets\Scenes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Build\Assets\Textures\beast.png">

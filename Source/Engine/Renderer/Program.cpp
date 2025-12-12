@@ -141,6 +141,9 @@ namespace neu {
             LOG_ERROR("Program link failed: {}", std::string(info, len));
             return false;
         }
+
+        // Invalidate cached uniform locations after relink
+        m_uniformLocations.clear();
         return true;
     }
 
@@ -167,7 +170,7 @@ namespace neu {
 
     void Program::SetUniform(const std::string& name, bool value) {
         GLint location = GetUniformLocation(name);
-        if (location != -1) glUniform1ui(location, value);
+        if (location != -1) glUniform1i(location, value ? 1 : 0);
     }
 
     void Program::SetUniform(const std::string& name, const glm::vec2& value) {
@@ -191,16 +194,23 @@ namespace neu {
     }
     
     GLint Program::GetUniformLocation(const std::string& name) {
-        auto it = m_uniformLocations.find(name);
-        if (it == m_uniformLocations.end())
-        {
-            GLint location = glGetUniformLocation(m_program, name.c_str());
-            if (location == -1)
-            {
-                LOG_WARNING("Could not find uniform: {}", name);
-            }
-            m_uniformLocations[name] = location;
+        if (SDL_GL_GetCurrentContext() == nullptr) {
+            LOG_ERROR("GetUniformLocation failed: no current GL context");
+            return -1;
         }
-        return m_uniformLocations[name];
+        if (m_program == 0 || glIsProgram(m_program) == GL_FALSE) {
+            LOG_ERROR("GetUniformLocation failed: invalid program {}", m_program);
+            return -1;
+        }
+
+        auto it = m_uniformLocations.find(name);
+        if (it != m_uniformLocations.end()) return it->second;
+
+        GLint location = glGetUniformLocation(m_program, name.c_str());
+        if (location == -1) {
+            LOG_WARNING("Uniform not found: {}", name);
+        }
+        m_uniformLocations[name] = location;
+        return location;
     }
 }

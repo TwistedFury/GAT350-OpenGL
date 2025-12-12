@@ -60,7 +60,7 @@
         {
           "type": "ModelRenderer",
           "model": "models/spot.obj",
-          "material": "materials/rtt.mat"
+          "material": "materials/spot.mat"
         },
         {
           "type": "RotationComponent",
@@ -75,17 +75,17 @@
     {
       "name": "postprocess",
       "persistent": true,
-      "active": false,
+      "active": true,
       "transform": {
         "position": [
-          0,
+          5,
           0,
           0
         ],
         "rotation": [
+          180,
           0,
-          0,
-          0
+          180
         ],
         "scale": [
           1,
@@ -96,7 +96,7 @@
       "components": [
         {
           "type": "ModelRenderer",
-          "model": "models/spot.obj",
+          "model": "models/quad.obj",
           "material": "materials/rtt.mat"
         },
         {

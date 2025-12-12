@@ -55,19 +55,18 @@ uniform vec3 u_ambient_light;
 
 void main()
 {
-    vs_out.texcoord = (a_texcoord + u_material.tiling) + u_material.offset;
-    // Compute world-space position and normal
+    vec2 flippedTexcoord = vec2(a_texcoord.x, 1.0 - a_texcoord.y);
+    vs_out.texcoord = (flippedTexcoord * u_material.tiling) + u_material.offset;
+
     mat4 model_view = u_view * u_model;
     mat3 normal_matrix = transpose(inverse(mat3(model_view)));
-	vec3 position = vec3(model_view * vec4(a_position, 1.0));
 
-	vs_out.texcoord = (a_texcoord * u_material.tiling) + u_material.offset;
-    vs_out.position = vec3(model_view * vec4(a_position, 1));
+    // Pass world space position to fragment shader
+    vs_out.position = vec3(u_model * vec4(a_position, 1));
     vs_out.normal = normalize(normal_matrix * a_normal);
 
     vec3 N = normalize(normal_matrix * a_normal);
     vec3 T = normalize(normal_matrix * a_tangent);
-    // re-orthogonalize T with respect to N
     T = normalize(T - dot(T, N) * N);
     vec3 B = normalize(cross(N, T));
     vs_out.tbn = mat3(T, B, N);

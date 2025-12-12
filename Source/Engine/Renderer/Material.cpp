@@ -108,6 +108,8 @@ namespace neu
         SERIAL_READ(document, tiling);
         SERIAL_READ(document, offset);
 
+        name = filename;
+
         return true;
     }
 
@@ -126,12 +128,12 @@ namespace neu
             return;
         }
 
+        // Before setting uniforms, ensure program bound succeeded
         program->Use();
-
-        // CHECK AFTER glUseProgram
         err = glGetError();
         if (err != GL_NO_ERROR) {
             LOG_ERROR("Material::Bind - GL Error after glUseProgram: 0x{:X}", err);
+            return; // avoid invalid uniform calls
         }
 
         // CHECK EACH TEXTURE BEFORE BINDING
@@ -202,29 +204,27 @@ namespace neu
             parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::CubeMap);
         }
 
-        //if (shadowMap)
-        //{
-        //    if (shadowMap->m_texture == 0) {
-        //        LOG_ERROR("Material::Bind - shadowMap texture invalid (ID=0)!");
-        //    }
-        //    else {
-        //        shadowMap->SetActive(GL_TEXTURE5);
-        //        shadowMap->Bind();
-        //        program->SetUniform("u_shadowMap", 5);
-        //        parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::ShadowMap);
-        //        LOG_INFO("Bound shadowMap to unit 5, texture ID: {}", shadowMap->m_texture);
-        //    }
-        //}
-        //else {
-        //    LOG_WARNING("Material::Bind - shadowMap is nullptr!");
-        //}
+        if (shadowMap)
+        {
+            if (shadowMap->m_texture == 0) {
+                LOG_ERROR("Material::Bind - shadowMap texture invalid (ID=0)!");
+            }
+            else {
+                shadowMap->SetActive(GL_TEXTURE5);
+                shadowMap->Bind();
+                program->SetUniform("u_shadowMap", 5);
+                parameters = (Parameters)((uint8_t)parameters | (uint8_t)Parameters::ShadowMap);
+                LOG_INFO("Bound shadowMap to unit 5, texture ID: {}", shadowMap->m_texture);
+            }
+        }
 
         program->SetUniform("u_material.baseColor", baseColor);
         program->SetUniform("u_material.emissiveColor", emissiveColor);
         program->SetUniform("u_material.shininess", shininess);
         program->SetUniform("u_material.tiling", tiling);
         program->SetUniform("u_material.offset", offset);
-        program->SetUniform("u_material.parameters", (uint8_t)parameters);
+        // Use uint since GLSL declares 'uint parameters;'
+        program->SetUniform("u_material.parameters", static_cast<unsigned int>(parameters));
         program->SetUniform("u_ior", ior);
 
         err = glGetError();

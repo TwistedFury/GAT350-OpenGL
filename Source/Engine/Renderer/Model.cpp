@@ -15,6 +15,7 @@ namespace neu
 			return false;
 		}
 		ProcessNode(scene->mRootNode, scene);
+		name = filename;
 		return true;
 	}
 

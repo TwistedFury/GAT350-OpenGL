@@ -1,0 +1,139 @@
+{
+  "actors": [
+    {
+      "name": "skybox",
+      "persistent": true,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "components": [
+        {
+          "type": "ModelRenderer",
+          "model": "models/cube.obj",
+          "material": "materials/skybox.mat",
+          "enableDepth": false,
+          "cullFace": "front"
+        }
+      ]
+    },
+    {
+      "name": "ogre",
+      "persistent": true,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          180,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "components": [
+        {
+          "type": "ModelRenderer",
+          "model": "models/ogre.obj",
+          "material": "materials/ogre.mat"
+        }
+      ]
+    },
+    {
+      "name": "camera",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 0, -5 ],
+        "rotation": [ 0, 180, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "CameraComponent",
+          "outputTexture": "postprocessTexture"
+        },
+        {
+          "type": "PostProcessComponent"
+        },
+        {
+          "type": "FirstPersonController",
+          "speed": 5,
+          "sensitivity": 0.2
+        }
+      ]
+    },
+    {
+      "name": "light01",
+      "persistent": true,
+      "transform": {
+        "position": [ 5, 5, 0 ],
+        "rotation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "LightComponent",
+          "color": [ 1, 0, 0 ],
+          "intensity": 1.5,
+          "range": 15,
+          "lightType": "spot",
+          "innerSpotAngle": 10,
+          "outerSpotAngle": 40
+        }
+      ]
+    },
+    {
+      "name": "light02",
+      "persistent": true,
+      "transform": {
+        "position": [ 7, 2, 3 ],
+        "rotation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "LightComponent",
+          "color": [ 0, 1, 0 ],
+          "intenstiy": 1.75,
+          "range": 20
+        }
+      ]
+    },
+    {
+      "name": "light03",
+      "persistent": true,
+      "transform": {
+        "position": [ -2, 6, 2 ],
+        "rotation": [ 0, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "LightComponent",
+          "color": [ 0, 0, 1 ],
+          "intensity": 2,
+          "range": 18
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-	"program": "shaders/lit_phong_shadow.prog",
+	"program": "shaders/lit_phong.prog",
 	"baseMap": "textures/spot_diffuse.png",
 	"shadowMap": "shadowTexture",
 	"baseColor": [ 1, 1, 1 ],

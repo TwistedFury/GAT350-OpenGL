@@ -74,23 +74,24 @@ float calculateAttenuation(in float light_distance, in float range)
 
 vec3 calculateLight(in Light light, in vec3 position, in vec3 normal, in float specularMask)
 {
-	vec3 light_dir; float attenuation = 1; float light_distance;
+	vec3 light_dir; 
+	float attenuation = 1; 
+	float light_distance;
+	
 	switch(light.type)
 	{
 		case POINT:
 			light_dir = normalize(light.position - position);
-
 			light_distance = distance(light.position, position);
 			attenuation = calculateAttenuation(light_distance, light.range);
 		break;
 
 		case DIRECTIONAL:
-			light_dir = -light.direction;
+			light_dir = normalize(-light.direction);  // Fixed normalize
 		break;
 		
 		case SPOT:
 			light_dir = normalize(light.position - position);
-
 			light_distance = distance(light.position, position);
 			attenuation = calculateAttenuation(light_distance, light.range);
 
@@ -101,12 +102,14 @@ vec3 calculateLight(in Light light, in vec3 position, in vec3 normal, in float s
 			}
 		break;
 	}
-	vec3 L = normalize(light.position - position);
+	
+	// USE light_dir instead of recalculating L
+	vec3 L = light_dir;  // ? Fixed!
 	vec3 V = normalize(-position);
 
-	// Diffuse
-	float LdotV = max(dot(L, V), 0);
-	vec3 diffuse = light.color * LdotV;
+    // Diffuse (Lambert)
+    float NdotL = max(dot(normal, L), 0);
+    vec3 diffuse = light.color * NdotL;
 
 	// Specular
 	float specularStrength = 1.0;
@@ -125,22 +128,23 @@ void main()
 	float specularMask = ((u_material.parameters & SPECULAR_MAP) != 0u) 
 		? texture(u_specularMap, fs_in.texcoord).r : 1;
 
-	mat4 model_view = u_view * u_model;
-	vec3 position = vec3(model_view * vec4(fs_in.position, 1));
+	// fs_in.position is ALREADY in view space from vertex shader!
+	vec3 position = fs_in.position;  // Don't transform again!
+	
 	vec3 normal = ((u_material.parameters & NORMAL_MAP) != 0u)
 		? calculateNormal()
 		: fs_in.normal;
 
 	vec3 color = u_ambient_light;
-	for (int i = 0; i < u_numLights; i++)
-	{
-		color += calculateLight(u_lights[i], fs_in.position, normal, specularMask);
-	}
+    for (int i = 0; i < u_numLights; i++)
+    {
+        color += calculateLight(u_lights[i], position, normal, specularMask);
+    }
 
 	vec4 emissive = ((u_material.parameters & EMISSIVE_MAP) != 0u) 
 		? texture(u_emissiveMap, fs_in.texcoord) + vec4(u_material.emissiveColor, 1)
 		: vec4(u_material.emissiveColor, 1);
 
-	//f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1) + emissive;
-	f_color = vec4(gl_FragCoord.z);
+  // Final color: base texture modulated by lighting, plus emissive
+  f_color = texture(u_baseMap, fs_in.texcoord) * vec4(color, 1) + emissive;
 }

@@ -22,8 +22,8 @@ void main()
 
 	vec4 postprocess = color;
 	// Apply PostFX
-	if ((u_parameters & COLORTINT) != 0) postprocess += u_colorTint;
+	//if ((u_parameters & COLORTINT) != 0) postprocess += u_colorTint;
 	//if ((u_parameters & GRAYSCALE) != 0) applyGrayScale();
 	
-	f_color = postprocess;
+	//f_color = postprocess;
 }

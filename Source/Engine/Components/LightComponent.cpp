@@ -13,9 +13,13 @@ namespace neu
 		glm::vec3 position = owner->transform.position;
 		glm::vec3 direction = owner->transform.Forward();
 
+		// Transform to view space
+		glm::vec3 viewPosition = glm::vec3(view * glm::vec4(position, 1.0f));
+		glm::vec3 viewDirection = glm::vec3(view * glm::vec4(direction, 0.0f)); // w=0 for directions
+
 		program.SetUniform(name + ".type", (int)lightType);
-		program.SetUniform(name + ".position", position);
-		program.SetUniform(name + ".direction", direction);
+		program.SetUniform(name + ".position", viewPosition);      // Now in view space!
+		program.SetUniform(name + ".direction", viewDirection);    // Now in view space!
 		program.SetUniform(name + ".color", color);
 		program.SetUniform(name + ".intensity", intensity);
 		program.SetUniform(name + ".range", range);
