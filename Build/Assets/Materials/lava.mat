@@ -1,0 +1,10 @@
+{
+	"program": "shaders/lit_phong.prog",
+	"baseMap": "textures/lava_base.png",
+	"emissiveMap": "textures/lava_emissive.png",
+	"baseColor": [ 1, 1, 1 ],
+	"emissiveColor": [ 1, 0.5, 0.5 ],
+	"shininess": 128,
+	"tiling": [ 5, 5 ],
+	"offset": [ 0, 0 ]
+}

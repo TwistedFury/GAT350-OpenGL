@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Build\Assets\Materials\crate.mat" />
+    <None Include="..\..\Build\Assets\Materials\lava.mat" />
     <None Include="..\..\Build\Assets\Materials\ogre.mat" />
     <None Include="..\..\Build\Assets\Materials\postprocess.mat" />
     <None Include="..\..\Build\Assets\Materials\reflection.mat" />

@@ -22,7 +22,7 @@ uniform mat4 u_projection;
 
 void main()
 {
-    vec2 flippedTexcoord = vec2(a_texcoord.x, 1.0 - a_texcoord.y);
+    vec2 flippedTexcoord = vec2(1.0 - a_texcoord.x, 1.0 - a_texcoord.y);
     v_texcoord = (flippedTexcoord * u_material.tiling) + u_material.offset;
 	
 	gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0);

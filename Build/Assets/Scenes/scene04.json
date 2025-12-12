@@ -1,13 +1,97 @@
 {
   "actors": [
     {
-      "name": "cube",
+      "name": "ball",
       "persistent": true,
       "transform": {
         "position": [
           0,
           0,
           0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "components": [
+        {
+          "type": "ModelRenderer",
+          "model": "models/sphere.obj",
+          "material": "materials/lava.mat"
+        }
+      ]
+    },
+    {
+      "name": "cube",
+      "persistent": true,
+      "transform": {
+        "position": [
+          -2,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "components": [
+        {
+          "type": "ModelRenderer",
+          "model": "models/cube.obj",
+          "material": "materials/crate.mat"
+        }
+      ]
+    },
+    {
+      "name": "spot",
+      "persistent": true,
+      "transform": {
+        "position": [
+          2,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "components": [
+        {
+          "type": "ModelRenderer",
+          "model": "models/spot.obj",
+          "material": "materials/spot.mat"
+        }
+      ]
+    },
+    {
+      "name": "ogre",
+      "persistent": true,
+      "transform": {
+        "position": [
+          0,
+          0,
+          -2
         ],
         "rotation": [
           0,
@@ -23,8 +107,36 @@
       "components": [
         {
           "type": "ModelRenderer",
-          "model": "models/cube.obj",
-          "material": "materials/crate.mat"
+          "model": "models/ogre.obj",
+          "material": "materials/ogre.mat"
+        }
+      ]
+    },
+    {
+      "name": "squirrel",
+      "persistent": true,
+      "transform": {
+        "position": [
+          0,
+          0,
+          2
+        ],
+        "rotation": [
+          0,
+          180,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "components": [
+        {
+          "type": "ModelRenderer",
+          "model": "models/squirrel.glb",
+          "material": "materials/squirrel.mat"
         }
       ]
     },
@@ -80,7 +192,7 @@
       ]
     },
     {
-      "name": "light01",
+      "name": "spot-light",
       "persistent": true,
       "transform": {
         "position": [ 5, 5, 0 ],
@@ -90,7 +202,7 @@
       "components": [
         {
           "type": "LightComponent",
-          "color": [ 1, 0, 0 ],
+          "color": [ 1, 1, 1 ],
           "intensity": 1.5,
           "range": 15,
           "lightType": "spot",
@@ -100,36 +212,42 @@
       ]
     },
     {
-      "name": "light02",
+      "name": "dir-light",
       "persistent": true,
       "transform": {
-        "position": [ 7, 2, 3 ],
+        "position": [ 5, 5, 0 ],
         "rotation": [ 0, 0, 0 ],
         "scale": [ 1, 1, 1 ]
       },
       "components": [
         {
           "type": "LightComponent",
-          "color": [ 0, 1, 0 ],
-          "intenstiy": 1.75,
-          "range": 20
+          "color": [ 1, 1, 1 ],
+          "intensity": 1.5,
+          "range": 15,
+          "lightType": "directional",
+          "innerSpotAngle": 10,
+          "outerSpotAngle": 40
         }
       ]
     },
     {
-      "name": "light03",
+      "name": "point-light",
       "persistent": true,
       "transform": {
-        "position": [ -2, 6, 2 ],
+        "position": [ 5, 5, 0 ],
         "rotation": [ 0, 0, 0 ],
         "scale": [ 1, 1, 1 ]
       },
       "components": [
         {
           "type": "LightComponent",
-          "color": [ 0, 0, 1 ],
-          "intensity": 2,
-          "range": 18
+          "color": [ 1, 1, 1 ],
+          "intensity": 1.5,
+          "range": 15,
+          "lightType": "point",
+          "innerSpotAngle": 10,
+          "outerSpotAngle": 40
         }
       ]
     }
