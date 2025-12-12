@@ -1,8 +1,8 @@
 {
   "ambient_light": [
-    0.2,
-    0.2,
-    0.2
+    0,
+    0,
+    0
   ],
   "postprocess": true,
   "actors": [
@@ -157,19 +157,53 @@
       "name": "light01",
       "persistent": true,
       "transform": {
-        "position": [ 0, 7.5, 0 ],
-        "rotation": [ 0, 0, 0 ],
+        "position": [ 5, 0, 0 ],
+        "rotation": [ 90, 0, 0 ],
         "scale": [ 1, 1, 1 ]
       },
       "components": [
         {
           "type": "LightComponent",
-          "color": [ 1, 1, 1 ],
-          "intensity": 1.5,
+          "color": [ 1, 0, 0 ],
+          "intensity": 10,
           "range": 15,
-          "lightType": "point",
-          "innerSpotAngle": 10,
-          "outerSpotAngle": 40
+          "lightType": "directional"
+        }
+      ]
+    },
+    {
+      "name": "light02",
+      "persistent": true,
+      "transform": {
+        "position": [ -5, 0, 0 ],
+        "rotation": [ -90, 0, 0 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "LightComponent",
+          "color": [ 0, 1, 0 ],
+          "intensity": 10,
+          "range": 15,
+          "lightType": "directional"
+        }
+      ]
+    },
+    {
+      "name": "light03",
+      "persistent": true,
+      "transform": {
+        "position": [ 0, 0, -5 ],
+        "rotation": [ 0, 0, 90 ],
+        "scale": [ 1, 1, 1 ]
+      },
+      "components": [
+        {
+          "type": "LightComponent",
+          "color": [ 0, 0, 1 ],
+          "intensity": 10,
+          "range": 15,
+          "lightType": "directional"
         }
       ]
     }

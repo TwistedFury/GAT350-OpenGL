@@ -47,6 +47,7 @@ namespace neu
         }
 
         // specularMap
+        textureName = "";
         SERIAL_READ_NAME(document, "specularMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading specularMap: {}", textureName);
@@ -61,6 +62,7 @@ namespace neu
         }
 
         // emissiveMap
+        textureName = "";
         SERIAL_READ_NAME(document, "emissiveMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading emissiveMap: {}", textureName);
@@ -75,6 +77,7 @@ namespace neu
         }
 
         // normalMap
+        textureName = "";
         SERIAL_READ_NAME(document, "normalMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading normalMap: {}", textureName);
@@ -89,6 +92,7 @@ namespace neu
         }
 
         // shadowMap - always try RenderTexture first (shadows are usually RTTs)
+        textureName = "";
         SERIAL_READ_NAME(document, "shadowMap", textureName);
         if (!textureName.empty()) {
             LOG_INFO("Loading shadowMap: {}", textureName);
@@ -98,6 +102,7 @@ namespace neu
         }
 
         SERIAL_READ_NAME(document, "cubeMap", textureName);
+        textureName = "";
         if (!textureName.empty()) cubeMap = Resources().Get<CubeMap>(textureName);
 
         //base color, shininess, tiling, and offset

@@ -136,13 +136,13 @@ void main()
 		: fs_in.normal;
 
 	vec3 color = u_ambient_light;
-    for (int i = 0; i < u_numLights; i++)
-    {
-        color += calculateLight(u_lights[i], position, normal, specularMask);
-    }
+	for (int i = 0; i < u_numLights; i++)
+	{
+	    color += calculateLight(u_lights[i], position, normal, specularMask);
+	}
 
 	vec4 emissive = ((u_material.parameters & EMISSIVE_MAP) != 0u) 
-		? texture(u_emissiveMap, fs_in.texcoord) + vec4(u_material.emissiveColor, 1)
+		? texture(u_emissiveMap, fs_in.texcoord) * vec4(u_material.emissiveColor, 1)
 		: vec4(u_material.emissiveColor, 1);
 
   // Final color: base texture modulated by lighting, plus emissive
